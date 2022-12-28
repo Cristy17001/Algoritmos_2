@@ -12,17 +12,11 @@ Manager::Manager() {
     load_Flights("flights.csv");
 }
 
-/*void Manager::set_Flights() const {
-
-}*/
 
 const FlightGraph Manager::get_Flights() const {
     return FlightGraph();
 }
 
-/*void Manager::add_airport() {
-
-}*/
 
 const unordered_map<string, Airport> Manager::get_airport() const {
     return unordered_map<string, Airport>();
