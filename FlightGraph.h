@@ -23,7 +23,8 @@ private:
 public:
     FlightGraph();
     void AddNode(string code);
-    void AddEdge(string source, string target);
+    void AddEdge(string source, string target, string airline);
+    unordered_map<string, Node*> get_nodes() const;
     vector<Node*> BfsNFlights(Node* source, Node* target);
 };
 

@@ -1,0 +1,27 @@
+# ninja log v5
+16	1119	6939475995759347	CMakeFiles/Trabalho_Algoritmos_2.dir/Airport.cpp.obj	ea7526e44f02baa9
+5	1526	6939486100533673	CMakeFiles/Trabalho_Algoritmos_2.dir/main.cpp.obj	6999303ce87c1408
+1205	1517	6939474993571170	Trabalho_Algoritmos_2.exe	400ba130af80d46e
+9	3003	6939476014409867	CMakeFiles/Trabalho_Algoritmos_2.dir/FlightGraph.cpp.obj	52129a3b89a099e3
+3	1362	6939484246405851	CMakeFiles/Trabalho_Algoritmos_2.dir/Manager.cpp.obj	ef0fe69b1807f15d
+1527	1903	6939486104248865	../Trabalho_Algoritmos_2.exe	f988348fdd3fa8ef
+10	780	6939501331497886	CMakeFiles/Trabalho_Algoritmos_2.dir/Airport.cpp.obj	ea7526e44f02baa9
+23	1648	6939501339606692	CMakeFiles/Trabalho_Algoritmos_2.dir/Airlines.cpp.obj	d440e2644b75dc9d
+18	3260	6939501355834481	CMakeFiles/Trabalho_Algoritmos_2.dir/main.cpp.obj	6999303ce87c1408
+14	3789	6939501361624728	CMakeFiles/Trabalho_Algoritmos_2.dir/Manager.cpp.obj	ef0fe69b1807f15d
+4	2095	6939510934773089	CMakeFiles/Trabalho_Algoritmos_2.dir/FlightGraph.cpp.obj	52129a3b89a099e3
+23	2100	6939510934812975	CMakeFiles/Trabalho_Algoritmos_2.dir/main.cpp.obj	6999303ce87c1408
+9	2405	6939510937863046	CMakeFiles/Trabalho_Algoritmos_2.dir/Manager.cpp.obj	ef0fe69b1807f15d
+2405	2791	6939510941707924	../Trabalho_Algoritmos_2.exe	29da718455a26739
+5	1248	6939511800862590	CMakeFiles/Trabalho_Algoritmos_2.dir/Manager.cpp.obj	ef0fe69b1807f15d
+1249	1603	6939511804380452	../Trabalho_Algoritmos_2.exe	29da718455a26739
+11	3049	6939516731729562	CMakeFiles/Trabalho_Algoritmos_2.dir/main.cpp.obj	6999303ce87c1408
+4	3058	6939516731859635	CMakeFiles/Trabalho_Algoritmos_2.dir/FlightGraph.cpp.obj	52129a3b89a099e3
+8	3736	6939516739011430	CMakeFiles/Trabalho_Algoritmos_2.dir/Manager.cpp.obj	ef0fe69b1807f15d
+3736	4279	6939516744447074	../Trabalho_Algoritmos_2.exe	29da718455a26739
+5	885	6939517145144541	CMakeFiles/Trabalho_Algoritmos_2.dir/main.cpp.obj	6999303ce87c1408
+886	1314	6939517149398358	../Trabalho_Algoritmos_2.exe	29da718455a26739
+5	1986	6939517617956585	CMakeFiles/Trabalho_Algoritmos_2.dir/main.cpp.obj	6999303ce87c1408
+1986	2471	6939517622778862	../Trabalho_Algoritmos_2.exe	29da718455a26739
+4	1052	6939518201948264	CMakeFiles/Trabalho_Algoritmos_2.dir/main.cpp.obj	6999303ce87c1408
+1053	1449	6939518205837856	../Trabalho_Algoritmos_2.exe	29da718455a26739

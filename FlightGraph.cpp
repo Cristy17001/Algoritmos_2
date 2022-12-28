@@ -8,7 +8,7 @@ void FlightGraph::AddNode(string code) {
     nodes_[code] = node;
 }
 
-void FlightGraph::AddEdge(string source, string target) {
+void FlightGraph::AddEdge(string source, string target, string airline) {
     Node* source_node = nodes_[source];
     Node* target_node = nodes_[target];
     source_node->neighbors.emplace_back(target_node);
@@ -48,3 +48,6 @@ vector<Node*> FlightGraph::BfsNFlights(Node* source, Node* target) {
     return {};
 }
 
+unordered_map<string, Node*> FlightGraph::get_nodes() const {
+    return nodes_;
+}
