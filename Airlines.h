@@ -18,16 +18,16 @@ public:
     Airlines();
     Airlines(string code, string name, string callsign, string country);
 
-    const string &getCode() const;
+    const string& getCode() const;
     void setCode(const string &code);
 
-    const string &getName() const;
+    const string& getName() const;
     void setName(const string &name);
 
-    const string &getCallsign() const;
+    const string& getCallsign() const;
     void setCallsign(const string &callsign);
 
-    const string &getCountry() const;
+    const string& getCountry() const;
     void setCountry(const string &country);
 };
 
