@@ -41,12 +41,11 @@ const CityToAirportsMap Manager::get_cities_to_airports() const {
 }
 
 
-
 void Manager::load_Flights(const std::string& filename) {
     ifstream file;
     string file_text;
     string source, target, airline;
-    // filename = "airlines.csv"
+    // filename = "flights.csv"
     file.open(filename);
 
     //Eliminate first line

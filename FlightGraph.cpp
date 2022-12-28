@@ -4,14 +4,18 @@
 FlightGraph::FlightGraph() = default;
 
 void FlightGraph::AddNode(string code) {
-    Node* node = new Node{code};
-    nodes_[code] = node;
+    if (nodes_[code] == nullptr) {
+        Node *node = new Node{code};
+        nodes_[code] = node;
+    }
 }
 
 void FlightGraph::AddEdge(string source, string target, string airline) {
     Node* source_node = nodes_[source];
-    Node* target_node = nodes_[target];
-    source_node->neighbors.emplace_back(target_node);
+    Edge edge = {target, airline};
+    if (source_node->neighbors.find(edge) == source_node->neighbors.end()) {
+        source_node->neighbors.insert(edge);
+    }
 }
 
 vector<Node*> FlightGraph::BfsNFlights(Node* source, Node* target) {
@@ -37,10 +41,10 @@ vector<Node*> FlightGraph::BfsNFlights(Node* source, Node* target) {
         }
 
         for (const auto& neighbor: current->neighbors) {
-            if (!neighbor->visited) {
-                neighbor->visited = true;
-                parent[neighbor] = current;
-                q.push(neighbor);
+            if (!nodes_[neighbor.node]->visited) {
+                nodes_[neighbor.node]->visited = true;
+                parent[nodes_[neighbor.node]] = current;
+                q.push(nodes_[neighbor.node]);
             }
         }
     }
