@@ -9,19 +9,26 @@ int main() {
     string choice;
 
     // Testes
+    cout << "Teste 1:" << endl;
     auto graph = manager.get_Flights();
-    auto shortest_paths = graph.BfsShortestPaths("ORY", "POM");
-    for (const auto& v: shortest_paths) {
-        for (auto n: v) {
-            cout << n->code << " ";
+    string source = "ORY";
+    string target = "WWK";
+    auto shortest_paths = graph.BfsShortestPaths(source, target);
+    for (const auto& path: shortest_paths) {
+        cout << source << " ";
+        for (auto e: path) {
+            cout << "~" << e.airline << "~" << " "  << e.node << " ";
         }
         cout << endl;
     }
-
-
-
-
-
+    cout << endl << endl << "Teste 2:" << endl;
+    auto shortest_path = graph.BfsShortestPathsnodes(source, target);
+    for (const auto& path: shortest_path) {
+        for (auto e: path) {
+            cout << e->code << " ";
+        }
+        cout << endl;
+    }
 
     do {
         cout

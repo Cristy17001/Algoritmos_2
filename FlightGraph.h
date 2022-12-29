@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <queue>
+#include <set>
 
 using namespace std;
 
@@ -30,8 +31,8 @@ struct EdgeEqual {
 
 struct Node {
     string code;
-    bool visited = false;
     unordered_set<Edge, EdgeHash, EdgeEqual> neighbors;
+    bool visited = false;
     int n_flights = 0;
 };
 
@@ -46,7 +47,9 @@ public:
     void AddNode(string code);
     void AddEdge(string source, string target, string airline);
     unordered_map<string, Node*> get_nodes() const;
-    vector<vector<Node*>> BfsShortestPaths(string source_name, string target_name);
+    vector<vector<Edge>> BfsShortestPaths(string source_name, string target_name);
+    vector<vector<Node*>> BfsShortestPathsnodes(string source_name, string target_name);
+
 };
 
 #endif
