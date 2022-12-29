@@ -14,16 +14,16 @@ Manager::Manager() {
 
 
 const FlightGraph Manager::get_Flights() const {
-    return FlightGraph();
+    return this->flights;
 }
 
 
 const unordered_map<string, Airport> Manager::get_airport() const {
-    return unordered_map<string, Airport>();
+    return this->airport;
 }
 
 const unordered_map<string, Airlines> Manager::get_airlines() const{
-    return unordered_map<string, Airlines>();
+    return this->airlines;
 };
 
 /*void Manager::city_to_airports() {

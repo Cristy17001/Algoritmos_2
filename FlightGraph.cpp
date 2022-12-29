@@ -18,40 +18,56 @@ void FlightGraph::AddEdge(string source, string target, string airline) {
     }
 }
 
-vector<Node*> FlightGraph::BfsNFlights(Node* source, Node* target) {
-    queue<Node*> q;
-    // Stores the parent of a node first
-    unordered_map<Node*, Node*> parent;
-    q.push(source);
-    source->visited = true;
+unordered_map<string, Node*> FlightGraph::get_nodes() const {
+    return nodes_;
+}
+
+vector<vector<Node*>> FlightGraph::BfsShortestPaths(string source_name, string target_name) {
+    queue<pair<Node*, vector<Node*>>> q;
+    Node* source = nodes_[source_name];
+    Node* target = nodes_[target_name];
+    vector<Node*> path;
+    path.push_back(source);
+    q.push({source, path});
+
+    vector<vector<Node*>> paths;
+    int shortest_path_length = -1;
 
     while (!q.empty()) {
-        Node* current = q.front();
+        Node* current = q.front().first;
+        path = q.front().second;
         q.pop();
 
         // Verify if target as been reached
         if (current == target) {
-            vector<Node*> path;
-            while (current) {
-                path.push_back(current);
-                current = parent[current];
+            if (shortest_path_length == -1 || path.size() == shortest_path_length) {
+                paths.push_back(path);
+                if (shortest_path_length == -1) {
+                    shortest_path_length = path.size();
+                }
+            } else if (path.size() < shortest_path_length) {
+                paths.clear();
+                paths.push_back(path);
+                shortest_path_length = path.size();
             }
-            reverse(path.begin(), path.end());
-            return path;
-        }
-
-        for (const auto& neighbor: current->neighbors) {
-            if (!nodes_[neighbor.node]->visited) {
-                nodes_[neighbor.node]->visited = true;
-                parent[nodes_[neighbor.node]] = current;
-                q.push(nodes_[neighbor.node]);
+        } else {
+            // Default BFS search marking as visited
+            for (const auto& neighbor: current->neighbors) {
+                if (!nodes_[neighbor.node]->visited) {
+                    nodes_[neighbor.node]->visited = true;
+                    vector<Node*> new_path = path;
+                    new_path.push_back(nodes_[neighbor.node]);
+                    q.push({nodes_[neighbor.node], new_path});
+                }
             }
         }
     }
 
-    return {};
+    return paths;
 }
 
-unordered_map<string, Node*> FlightGraph::get_nodes() const {
-    return nodes_;
-}
+
+
+
+
+

@@ -1,3 +1,0 @@
-F:/ProjetoVoos/Project/cmake-build-debug/CMakeFiles/Trabalho_Algoritmos_2.dir
-F:/ProjetoVoos/Project/cmake-build-debug/CMakeFiles/edit_cache.dir
-F:/ProjetoVoos/Project/cmake-build-debug/CMakeFiles/rebuild_cache.dir
