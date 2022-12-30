@@ -10,30 +10,12 @@
 
 using namespace std;
 
-struct Edge {
-    string node;
-    string airline;
-};
-
-struct EdgeHash {
-    size_t operator()(const Edge& e) const {
-        size_t h1 = std::hash<string>()(e.node);
-        size_t h2 = std::hash<string>()(e.airline);
-        return h1 ^ h2;
-    }
-};
-
-struct EdgeEqual {
-    bool operator()(const Edge& e1, const Edge& e2) const {
-        return e1.node == e2.node && e1.airline == e2.airline;
-    }
-};
-
 struct Node {
     string code;
-    unordered_set<Edge, EdgeHash, EdgeEqual> neighbors;
+    // First field is the destination and the vector are the airlines from which it can travel
+    unordered_map<string, vector<string>> neighbors;
     bool visited = false;
-    int n_flights = 0;
+    int n_visited = 0;
 };
 
 
@@ -47,9 +29,8 @@ public:
     void AddNode(string code);
     void AddEdge(string source, string target, string airline);
     unordered_map<string, Node*> get_nodes() const;
-    vector<vector<Edge>> BfsShortestPaths(string source_name, string target_name);
-    vector<vector<Node*>> BfsShortestPathsnodes(string source_name, string target_name);
-
+    vector<vector<Node*>> BfsShortestPaths(string source_name, string target_name);
+    vector<vector<string>> transformer(vector<vector<Node*>> paths);
 };
 
 #endif

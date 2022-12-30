@@ -1,5 +1,6 @@
 #include <algorithm>
 #include "FlightGraph.h"
+#include <iostream>
 
 FlightGraph::FlightGraph() = default;
 
@@ -12,9 +13,11 @@ void FlightGraph::AddNode(string code) {
 
 void FlightGraph::AddEdge(string source, string target, string airline) {
     Node* source_node = nodes_[source];
-    Edge edge = {target, airline};
-    if (source_node->neighbors.find(edge) == source_node->neighbors.end()) {
-        source_node->neighbors.insert(edge);
+    if (!source_node->neighbors[target].empty()) {
+        source_node->neighbors[target].push_back(airline);
+    }
+    else {
+        source_node->neighbors[target] = {airline};
     }
 }
 
@@ -22,105 +25,81 @@ unordered_map<string, Node*> FlightGraph::get_nodes() const {
     return nodes_;
 }
 
-vector<vector<Edge>> FlightGraph::BfsShortestPaths(string source_name, string target_name) {
-    queue<pair<Node*, vector<Edge>>> q;
-    Node* source = nodes_[source_name];
-    Node* target = nodes_[target_name];
-    vector<Edge> path;
-    q.push({source, path});
-    vector<vector<Edge>> paths;
-    int shortest_path_length = -1;
-    Node* last_node = nullptr;
-
-    while (!q.empty()) {
-        Node* current = q.front().first;
-        path = q.front().second;
-        q.pop();
-
-        // Verify if target as been reached
-        if (current->code == target_name) {
-            if (shortest_path_length == -1 || path.size() == shortest_path_length) {
-                paths.push_back(path);
-                if (shortest_path_length == -1) {
-                    shortest_path_length = path.size();
-                }
-            }
-            else if (path.size() < shortest_path_length) {
-                paths.clear();
-                paths.push_back(path);
-                shortest_path_length = path.size();
-            }
-
-        }
-        else {
-            // Default BFS search marking as visited
-            set<string> repeting_node;
-            for (const auto& neighbor: current->neighbors) {
-                // If repetition true then that node has already been used before by another edge
-                bool repetition = (repeting_node.find(neighbor.node) != repeting_node.end());
-
-                if (!nodes_[neighbor.node]->visited || (last_node == nodes_[neighbor.node]) || repetition) {
-                    if (nodes_[neighbor.node] != target) nodes_[neighbor.node]->visited = true;
-
-                    repeting_node.insert(neighbor.node);
-                    vector<Edge> new_path = path;
-                    Edge edge = {neighbor.node, neighbor.airline};
-                    new_path.push_back(edge);
-                    q.push({nodes_[neighbor.node], new_path});
-                    last_node = nodes_[neighbor.node];
-
-                }
-            }
-        }
-    }
-    for (auto& n: nodes_) {n.second->visited = false;}
-    return paths;
-}
-
-vector<vector<Node*>> FlightGraph::BfsShortestPathsnodes(string source_name, string target_name) {
+vector<vector<Node*>> FlightGraph::BfsShortestPaths(string source_name, string target_name) {
     queue<pair<Node*, vector<Node*>>> q;
     Node* source = nodes_[source_name];
     Node* target = nodes_[target_name];
     vector<Node*> path;
     path.push_back(source);
     q.push({source, path});
-
+    int shortest_length = INT_MAX;
     vector<vector<Node*>> paths;
-    int shortest_path_length = -1;
-    Node* last_node = nullptr;
 
     while (!q.empty()) {
+        // Current node
         Node* current = q.front().first;
+        // Current path
         path = q.front().second;
         q.pop();
 
-        // Verify if target as been reached
         if (current->code == target_name) {
-            if (shortest_path_length == -1 || path.size() == shortest_path_length) {
+            if (shortest_length == INT_MAX) {
+                shortest_length = path.size();
+            }
+            if (shortest_length == INT_MAX || path.size() == shortest_length) {
                 paths.push_back(path);
-                if (shortest_path_length == -1) {
-                    shortest_path_length = path.size();
-                }
-            } else if (path.size() < shortest_path_length) {
+            }
+            else if (path.size() < shortest_length) {
                 paths.clear();
                 paths.push_back(path);
-                shortest_path_length = path.size();
+                shortest_length = path.size();
             }
-        } else {
-            // Default BFS search marking as visited
-            for (const auto& neighbor: current->neighbors) {
-                if (!nodes_[neighbor.node]->visited || (last_node == nodes_[neighbor.node])) {
-                    if (nodes_[neighbor.node] != target) {
-                        nodes_[neighbor.node]->visited = true;
-                    }
-                    vector<Node*> new_path = path;
-                    new_path.push_back(nodes_[neighbor.node]);
-                    q.push({nodes_[neighbor.node], new_path});
-                    last_node = nodes_[neighbor.node];
-                }
+        }
+        for (auto &neighbor: current->neighbors) {
+            // Destination node
+            string node = neighbor.first;
+            Node *node_ptr = nodes_[node];
+            if (node_ptr->n_visited == 0 || current->n_visited + 1 <= node_ptr->n_visited) {
+                node_ptr->n_visited = current->n_visited + 1;
+                vector<Node *> new_path = path;
+                new_path.push_back(nodes_[node]);
+                q.push({nodes_[node], new_path});
             }
         }
     }
-    for (auto& n: nodes_) {n.second->visited = false;}
+    auto test = transformer(paths);
     return paths;
+}
+
+vector<vector<string>> FlightGraph::transformer(vector<vector<Node*>> paths) {
+    vector<vector<string>> res;
+    for (auto path: paths) {
+        for (int i = 0; i < path.size() - 1; i++) {
+            vector<string> airlines = path[i]->neighbors[path[i + 1]->code];
+            if (res.empty()) {
+                for (auto a: airlines) {
+                    vector<string> aux;
+                    aux.push_back(path[i]->code);
+                    aux.push_back(a);
+                    aux.push_back(path[i+1]->code);
+                    res.push_back(aux);
+                }
+            }
+            else {
+                for (auto& s: res) {
+                    auto& copy = s;
+                    //std::remove(res.begin(), res.end(), s);
+                    //res.pop_back();
+                    for (auto a: airlines) {
+                        vector<string> aux = copy;
+                        aux.push_back(a);
+                        aux.push_back(path[i+1]->code);
+                        res.push_back(aux);
+                    }
+                }
+            }
+        }
+
+    }
+    return res;
 }
