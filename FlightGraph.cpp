@@ -67,39 +67,30 @@ vector<vector<Node*>> FlightGraph::BfsShortestPaths(string source_name, string t
             }
         }
     }
-    auto test = transformer(paths);
     return paths;
 }
 
 vector<vector<string>> FlightGraph::transformer(vector<vector<Node*>> paths) {
     vector<vector<string>> res;
     for (auto path: paths) {
+        vector<vector<string>> new_paths;
+        new_paths.push_back({path[0]->code});
         for (int i = 0; i < path.size() - 1; i++) {
-            vector<string> airlines = path[i]->neighbors[path[i + 1]->code];
-            if (res.empty()) {
+            string source = path[i]->code;
+            string target = path[i + 1]->code;
+            vector<string> airlines = path[i]->neighbors[target];
+            vector<vector<string>> updated_paths;
+            for (auto p: new_paths) {
                 for (auto a: airlines) {
-                    vector<string> aux;
-                    aux.push_back(path[i]->code);
-                    aux.push_back(a);
-                    aux.push_back(path[i+1]->code);
-                    res.push_back(aux);
+                    vector<string> current_path = p;
+                    current_path.push_back(a);
+                    current_path.push_back(target);
+                    updated_paths.push_back(current_path);
                 }
             }
-            else {
-                for (auto& s: res) {
-                    auto& copy = s;
-                    //std::remove(res.begin(), res.end(), s);
-                    //res.pop_back();
-                    for (auto a: airlines) {
-                        vector<string> aux = copy;
-                        aux.push_back(a);
-                        aux.push_back(path[i+1]->code);
-                        res.push_back(aux);
-                    }
-                }
-            }
+            new_paths = updated_paths;
         }
-
+        res.insert(res.end(), new_paths.begin(), new_paths.end());
     }
     return res;
 }

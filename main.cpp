@@ -14,9 +14,16 @@ int main() {
     string source = "OPO";
     string target = "GDN";
     auto shortest_paths = graph.BfsShortestPaths(source, target);
-    for (const auto& path: shortest_paths) {
-        for (auto e: path) {
-            cout << e->code << " ";
+    auto res = graph.transformer(shortest_paths);
+    for (auto r : res) {
+        int count = 0;
+        for (auto s : r){
+            count++;
+            if(count%2==0){
+                cout << "~" << s << "~ ";
+            }
+            else{
+                cout << s << " ";}
         }
         cout << endl;
     }
