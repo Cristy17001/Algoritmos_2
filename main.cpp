@@ -9,24 +9,24 @@ int main() {
     Manager manager = Manager();
     string choice;
     // Testes
-    //cout << "Teste 1:" << endl;
-    //auto graph = manager.get_Flights();
-    //string source = "WWK";
-    //string target = "OPO";
-    //auto shortest_paths = graph.BfsShortestPaths(source, target);
-    //auto res = graph.transformer(shortest_paths);
-    //for (auto r : res) {
-    //    int count = 0;
-    //    for (auto s : r){
-    //        count++;
-    //        if(count%2==0) {
-    //            cout << "~" << s << "~ ";
-    //        }
-    //        else{
-    //            cout << s << " ";}
-    //    }
-    //    cout << endl;
-    //}
+    cout << "Teste 1:" << endl;
+    auto graph = manager.get_Flights();
+    string source = "YVM";
+    string target = "MPN";
+    auto shortest_paths = graph.BfsShortestPaths(source, target);
+    auto res = graph.transformer(shortest_paths);
+    for (auto r : res) {
+        int count = 0;
+        for (auto s : r){
+            count++;
+            if(count%2==0) {
+                cout << "~" << s << "~ ";
+            }
+            else{
+                cout << s << " ";}
+        }
+        cout << endl;
+    }
 
     do {
         cout

@@ -39,8 +39,7 @@ vector<vector<Node*>> FlightGraph::BfsShortestPaths(string source_name, string t
         // Current node
         Node* current = q.front().first;
         // Current path
-        path = q.front().second;
-        q.pop();
+        path = q.front().second; q.pop();
 
         if (current->code == target_name) {
             if (shortest_length == INT_MAX) {
@@ -55,15 +54,19 @@ vector<vector<Node*>> FlightGraph::BfsShortestPaths(string source_name, string t
                 shortest_length = path.size();
             }
         }
-        for (auto &neighbor: current->neighbors) {
-            // Destination node
-            string node = neighbor.first;
-            Node *node_ptr = nodes_[node];
-            if (node_ptr->n_visited == 0 || current->n_visited + 1 <= node_ptr->n_visited) {
-                node_ptr->n_visited = current->n_visited + 1;
-                vector<Node *> new_path = path;
-                new_path.push_back(nodes_[node]);
-                q.push({nodes_[node], new_path});
+        // Don't add the target because it doesn't make sense
+        else if (current->n_visited + 1 <= shortest_length) {
+            for (auto &neighbor: current->neighbors) {
+                // Destination node
+                string node = neighbor.first;
+                Node *node_ptr = nodes_[node];
+                // if not visited or visiting is good because it still is the shortest path
+                if (node_ptr->n_visited == 0 || current->n_visited + 1 <= node_ptr->n_visited) {
+                    node_ptr->n_visited = current->n_visited + 1;
+                    vector<Node *> new_path = path;
+                    new_path.push_back(nodes_[node]);
+                    q.push({nodes_[node], new_path});
+                }
             }
         }
     }
