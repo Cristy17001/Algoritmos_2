@@ -105,14 +105,13 @@ unordered_set<string> FlightGraph::BfsNflights(string airport, int n_flights) {
 
     while (!q.empty()) {
         Node* current = q.front(); q.pop();
-
-        if (current->n_visited <= n_flights) {
+        if (current->n_visited <= n_flights && current->n_visited != 0) {
             res.insert(current->code);
         }
 
         for (auto& neighbor: current->neighbors) {
             Node* neighbor_ptr = nodes_[neighbor.first];
-            if (neighbor_ptr->n_visited < n_flights) {
+            if (neighbor_ptr->n_visited <= n_flights && neighbor_ptr->n_visited == 0 && neighbor_ptr != node) {
                 neighbor_ptr->n_visited = current->n_visited + 1;
                 q.push(neighbor_ptr);
             }

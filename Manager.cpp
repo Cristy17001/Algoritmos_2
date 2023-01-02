@@ -26,9 +26,6 @@ const unordered_map<string, Airlines> Manager::get_airlines() const{
     return this->airlines;
 };
 
-/*void Manager::city_to_airports() {
-
-}*/
 
 const CityToAirportsMap Manager::get_cities_to_airports() const {
     return cities_to_airports;
@@ -137,7 +134,7 @@ int Manager::diff_countrys(string airp) {
     vector<string> diff_dest = flights.diff_dest(airp);
     unordered_set<string> counter;
     for (string str: diff_dest) {
-        Airport a = airport[airp];
+        Airport a = airport[str];
         counter.insert(a.getCountry());
     }
     return counter.size();

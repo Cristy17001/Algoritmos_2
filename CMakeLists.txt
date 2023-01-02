@@ -13,4 +13,6 @@ add_executable(Trabalho_Algoritmos_2
         Airport.h
         Airlines.cpp
         Airlines.h
+        Menus.cpp
+        Manager.h
         main.cpp)
