@@ -7,7 +7,7 @@ using namespace std;
 int main() {
     Manager manager = Manager();
     string choice;
-
+    string test = "ola";
     // Testes
     cout << "Teste 1:" << endl;
     auto graph = manager.get_Flights();
