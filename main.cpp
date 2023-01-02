@@ -11,15 +11,15 @@ int main() {
     // Testes
     cout << "Teste 1:" << endl;
     auto graph = manager.get_Flights();
-    string source = "OPO";
-    string target = "GDN";
+    string source = "ORY";
+    string target = "WWK";
     auto shortest_paths = graph.BfsShortestPaths(source, target);
     auto res = graph.transformer(shortest_paths);
     for (auto r : res) {
         int count = 0;
         for (auto s : r){
             count++;
-            if(count%2==0){
+            if(count%2==0) {
                 cout << "~" << s << "~ ";
             }
             else{

@@ -5,6 +5,7 @@
 #include "Airport.h"
 #include "Airlines.h"
 #include <fstream>
+#include <cmath>
 
 // Defining the hash "constructor"
 struct PairHash {
@@ -53,6 +54,9 @@ public:
     void load_Flights(const std::string& filename);
     void load_Airports(const std::string& filename);
     void load_Airlines(const std::string& filename);
+
+    double haversine(double lat1, double lon1, double lat2, double lon2);
+    int diff_countrys(string airport);
 
 };
 

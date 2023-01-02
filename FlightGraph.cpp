@@ -67,6 +67,8 @@ vector<vector<Node*>> FlightGraph::BfsShortestPaths(string source_name, string t
             }
         }
     }
+    // Clear the n_visited flag
+    for (auto& e: nodes_) {e.second->n_visited = 0;}
     return paths;
 }
 
@@ -93,4 +95,36 @@ vector<vector<string>> FlightGraph::transformer(vector<vector<Node*>> paths) {
         res.insert(res.end(), new_paths.begin(), new_paths.end());
     }
     return res;
+}
+
+int FlightGraph::n_flights(string airport) {
+    auto airport_ptr = nodes_[airport];
+    return airport_ptr->neighbors.size();
+}
+
+int FlightGraph::diff_airline(std::string airport) {
+    Node* airport_ptr = nodes_[airport];
+    auto neighbors = airport_ptr->neighbors;
+    // Unordered set for insertion and searching with O(1) complexity
+    unordered_set<string> aux;
+    for (auto [key, v_strings]: neighbors) {
+        for (string str: v_strings) {
+            aux.insert(str);
+        }
+    }
+    return aux.size();
+}
+
+int FlightGraph::n_diff_dest(string airport) {
+    Node* airport_ptr = nodes_[airport];
+    return nodes_[airport]->neighbors.size();
+}
+
+vector<string> FlightGraph::diff_dest(string airport) {
+    Node* airport_ptr = nodes_[airport];
+    vector<string> diff_airports;
+    for (auto [airport, airlines]: nodes_[airport]->neighbors) {
+        diff_airports.push_back(airport);
+    }
+    return diff_airports;
 }
