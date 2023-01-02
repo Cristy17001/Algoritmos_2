@@ -11,8 +11,8 @@ int main() {
     // Testes
     cout << "Teste 1:" << endl;
     auto graph = manager.get_Flights();
-    string source = "a";
-    string target = "b";
+    string source = "WWK";
+    string target = "OPO";
     auto shortest_paths = graph.BfsShortestPaths(source, target);
     auto res = graph.transformer(shortest_paths);
     for (auto r : res) {

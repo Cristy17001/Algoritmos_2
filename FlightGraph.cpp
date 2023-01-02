@@ -134,8 +134,8 @@ int FlightGraph::diff_airline(std::string airport) {
     auto neighbors = airport_ptr->neighbors;
     // Unordered set for insertion and searching with O(1) complexity
     unordered_set<string> aux;
-    for (auto [key, v_strings]: neighbors) {
-        for (string str: v_strings) {
+    for (auto n: neighbors) {
+        for (string str: n.second) {
             aux.insert(str);
         }
     }
