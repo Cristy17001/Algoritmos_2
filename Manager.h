@@ -57,7 +57,7 @@ public:
 
     double haversine(double lat1, double lon1, double lat2, double lon2);
     int diff_countrys(string airport);
-
+    vector<int> n_flights_bfs(string airp, int n_flights);
 };
 
 #endif

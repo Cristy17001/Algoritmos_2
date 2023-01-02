@@ -132,8 +132,32 @@ double Manager::haversine(double lat1, double lon1, double lat2, double lon2) {
     double c = 2 * asin(sqrt(a));
     return rad * c;
 }
-// TODO
-int Manager::diff_countrys(string airport) {
-    vector<string> diff_dest = flights.diff_dest(airport);
 
+int Manager::diff_countrys(string airp) {
+    vector<string> diff_dest = flights.diff_dest(airp);
+    unordered_set<string> counter;
+    for (string str: diff_dest) {
+        Airport a = airport[airp];
+        counter.insert(a.getCountry());
+    }
+    return counter.size();
+}
+
+vector<int> Manager::n_flights_bfs(string airp, int n_flights) {
+    // elements in this order airports, city's, country's
+    vector<int> res;
+    unordered_set<string> airports = flights.BfsNflights(airp, n_flights);
+    int n_aiports = airports.size();
+    res.push_back(n_aiports);
+    unordered_set<string> countrys;
+    unordered_set<string> citys;
+
+    for (auto str: airports) {
+        citys.insert(airport[str].getCity());
+        countrys.insert(airport[str].getCountry());
+    }
+    res.push_back(citys.size());
+    res.push_back(countrys.size());
+
+    return res;
 }

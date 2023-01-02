@@ -31,6 +31,7 @@ public:
     unordered_map<string, Node*> get_nodes() const;
     vector<vector<Node*>> BfsShortestPaths(string source_name, string target_name);
     vector<vector<string>> transformer(vector<vector<Node*>> paths);
+    unordered_set<string> BfsNflights(string airport, int n_flights);
     int n_flights(string airport);
     int diff_airline(string airport);
     int n_diff_dest(string airport);

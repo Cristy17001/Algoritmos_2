@@ -97,6 +97,33 @@ vector<vector<string>> FlightGraph::transformer(vector<vector<Node*>> paths) {
     return res;
 }
 
+unordered_set<string> FlightGraph::BfsNflights(string airport, int n_flights) {
+    Node* node = nodes_[airport];
+    queue<Node*> q;
+    unordered_set<string> res;
+    q.push(node);
+
+    while (!q.empty()) {
+        Node* current = q.front(); q.pop();
+
+        if (current->n_visited <= n_flights) {
+            res.insert(current->code);
+        }
+
+        for (auto& neighbor: current->neighbors) {
+            Node* neighbor_ptr = nodes_[neighbor.first];
+            if (neighbor_ptr->n_visited < n_flights) {
+                neighbor_ptr->n_visited = current->n_visited + 1;
+                q.push(neighbor_ptr);
+            }
+        }
+    }
+    // Clear the n_visited flag
+    for (auto& e: nodes_) {e.second->n_visited = 0;}
+    return res;
+}
+
+
 int FlightGraph::n_flights(string airport) {
     auto airport_ptr = nodes_[airport];
     return airport_ptr->neighbors.size();
