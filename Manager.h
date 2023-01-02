@@ -6,6 +6,7 @@
 #include "Airlines.h"
 #include <fstream>
 #include <cmath>
+#include <float.h>
 
 // Defining the hash "constructor"
 struct PairHash {
@@ -42,6 +43,12 @@ private:
 public:
     Manager();
 
+    enum InputType {
+        Airports,
+        Cities,
+        Coordinates
+    };
+
     //void set_Flights() const;
     const FlightGraph get_Flights() const;
 
@@ -50,6 +57,12 @@ public:
     const unordered_map<string, Airlines> get_airlines() const;
 
     const CityToAirportsMap get_cities_to_airports() const;
+
+    vector<string> getAirportsByCity (const string& coutry, const string& city) const;
+
+    pair<double, vector<string>> getMinDistancePath (const vector<string>& sourceAirports, const vector<string>& targetAirports);
+
+    vector<vector<string>> findShortestPathConditions(InputType inputType, InputType destinationType,const string &country, const string &input,const string &countryD, const string &target, int inputLat, int inputLong, double inputDist);
 
     void load_Flights(const std::string& filename);
     void load_Airports(const std::string& filename);

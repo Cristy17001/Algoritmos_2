@@ -31,6 +31,96 @@ const CityToAirportsMap Manager::get_cities_to_airports() const {
     return cities_to_airports;
 }
 
+vector<string> Manager::getAirportsByCity(const string& country, const string& city) const {
+    vector<string> e;
+    auto cityAirports = this->get_cities_to_airports();
+    auto it = cityAirports.find({country,city});
+    if (it != cityAirports.end()){
+        e = it->second;
+    }
+    return e;
+}
+
+pair<double, vector<string>> Manager::getMinDistancePath (const vector<string>& sourceAirports, const vector<string>& targetAirports) {
+    auto graph = this->get_Flights();
+    pair<double, vector<string>> min_path;
+    min_path.first = DBL_MAX;
+    for (const auto& sourceAirport : sourceAirports) {
+        for (const auto& targetAirport : targetAirports) {
+            if(targetAirport != sourceAirport){
+                auto shortest_path = graph.BfsShortestPaths(sourceAirport, targetAirport);
+                auto path = graph.transformer(shortest_path)[0];
+                double distance = 0;
+                for (int i = 0; i < path.size() - 2; i+=2) {
+                    distance += haversine(
+                            this->get_airport().at(path[i]).getLatitude(),
+                            this->get_airport().at(path[i]).getLongitude(),
+                            this->get_airport().at(path[i+2]).getLatitude(),
+                            this->get_airport().at(path[i+2]).getLongitude()
+                    );
+                }
+                if (distance < min_path.first) {
+                    min_path.first = distance;
+                    min_path.second = path;
+                }
+            }
+        }
+    }
+    return min_path;
+}
+
+vector<vector<string>> Manager::findShortestPathConditions(InputType inputType, InputType destinationType,const string &country, const string &input,const string &countryD, const string &target, int inputLat, int inputLong, double inputDist) {
+    auto graph = this->get_Flights();
+
+    // Handle different input/destination types
+    switch (inputType) {
+        case Airports: {
+            if (destinationType == Airports) {
+                vector<string> source;
+                vector<string> tAirport;
+                source.push_back(input);
+                tAirport.push_back(target);
+                return{getMinDistancePath(source,tAirport).second};
+            } else {
+                // Shortest path from airport to city
+                auto sourceAirports = {input};
+                auto targetAirports = getAirportsByCity(countryD,target);
+                return {getMinDistancePath(sourceAirports, targetAirports).second};
+            }
+        }
+        case Cities: {
+            if (destinationType == Airports) {
+                // Shortest path from city to airport
+                auto sourceAirports = getAirportsByCity(country,input);
+                auto targetAirports = {target};
+                return {getMinDistancePath(sourceAirports, targetAirports).second};
+            } else {
+                // Shortest path between two cities
+                auto sourceAirports = getAirportsByCity(country,input);
+                auto targetAirports = getAirportsByCity(countryD, target);
+                return {getMinDistancePath(sourceAirports,targetAirports).second};
+            }
+        }
+        case Coordinates:{
+            vector<string> originAirports;
+            for (const auto& airport_pair : this->get_airport()) {
+                const auto& code = airport_pair.first;
+                const auto& airport = airport_pair.second;
+                if(haversine(airport.getLatitude(),airport.getLongitude(),inputLat,inputLong) < inputDist){
+                    originAirports.push_back(code);
+                }
+            }
+            if(destinationType == Airports){
+                auto targetAirports = {target};
+                return {getMinDistancePath(originAirports, targetAirports).second};
+            }else{
+                auto targetAirports = getAirportsByCity(countryD, target);
+                return {getMinDistancePath(originAirports, targetAirports).second};
+            }
+        }
+    }
+}
+
 
 void Manager::load_Flights(const std::string& filename) {
     ifstream file;
