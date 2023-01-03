@@ -8,22 +8,6 @@ using namespace std;
 int main() {
     Manager manager = Manager();
     string choice;
-    // Testes
-
-    /*auto shortest_paths = graph.BfsShortestPaths(source, target);
-    auto res = graph.transformer(shortest_paths);
-    for (auto r : res) {
-        int count = 0;
-        for (auto s : r){
-            count++;
-            if(count%2==0) {
-                cout << "~" << s << "~ ";
-            }
-            else{
-                cout << s << " ";}
-        }
-        cout << endl;
-    }*/
 
     do {
         cout
@@ -44,25 +28,7 @@ int main() {
 
         switch (choice[0]) {
             case '1': {
-                cout << "Teste 1:" << endl;
-                auto graph = manager.get_Flights();
-                string source = "YVM";
-                string target = "MPN";
-                auto random = manager.findShortestPathConditions(Manager::InputType::Cities,Manager::InputType::Cities,"Portugal","Porto","Poland","Gdansk",41.248055,-8.681389,300,{"RYR","WZZ"});
-                for (auto r : random) {
-                    int count = 0;
-                    for (auto s : r){
-                        count++;
-                        if(count%2==0) {
-                            cout << "~" << s << "~ ";
-                        }
-                        else{
-                            cout << s << " ";}
-                    }
-                    cout << endl;
-                    cout<<endl;
-                }
-                flightOptionsMenu(manager);
+                flightOptionsMenuOrigin(manager);
                 break;}
             case '2': {airportInfoMenu(manager); break;}
             case 'Q': break;

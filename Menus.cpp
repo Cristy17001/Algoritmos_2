@@ -1,13 +1,13 @@
 #include "Menus.h"
 
-void flightOptionsMenu(Manager& m) {
+void flightOptionsMenuOrigin(Manager& m) {
     string choice;
     cout
             << '\n'
             << "###############################################################################\n"
             << "#                           Flight Options Menu                               #\n"
             << "###############################################################################\n"
-            << "# Specify the type of location you want to input:                             #\n"
+            << "# Specify the type of location you of your origin:                            #\n"
             << "# 1. Airport                                                                  #\n"
             << "# 2. City and Country                                                         #\n"
             << "# 3. Latitude and Longitude                                                   #\n"
@@ -27,6 +27,161 @@ void flightOptionsMenu(Manager& m) {
         case '?': {cout << endl << "Error: Invalid input. Please enter one character." << endl << endl; break;}
         default : {cout << endl << "Error: Invalid input. Please enter a valid choice." << endl << endl; break;}
     }
+}
+
+void flightOptionsMenuDestination(Manager& m, string origin_type) {
+    string choice;
+    cout
+            << '\n'
+            << "###############################################################################\n"
+            << "#                           Flight Options Menu                               #\n"
+            << "###############################################################################\n"
+            << "# Specify the type of location you of your destination:                            #\n"
+            << "# 1. Airport                                                                  #\n"
+            << "# 2. City and Country                                                         #\n"
+            << "# B. Back                                                                     #\n"
+            << "###############################################################################\n"
+            << "#> ";
+
+    cin >> choice;
+    if (choice.size() > 1) {choice.clear(); choice[0] = '?';}
+    choice = (char)toupper(choice[0]);
+
+
+    switch (choice[0]) {
+        case '1': {
+            vector<string> dest_type;
+            dest_type.push_back(origin_type);
+            dest_type.push_back("Airports");
+            flightOptionsProcess(m, dest_type);
+
+            break;
+        }
+        case '2': {
+            vector<string> dest_type;
+            dest_type.push_back(origin_type);
+            dest_type.push_back("Cities");
+            flightOptionsProcess(m, dest_type);
+            break;
+        }
+        case 'B': break;
+        case '?': {cout << endl << "Error: Invalid input. Please enter one character." << endl << endl; break;}
+        default : {cout << endl << "Error: Invalid input. Please enter a valid choice." << endl << endl; break;}
+    }
+}
+
+void flightOptionsProcess(Manager& m, vector<string> orig_dest) {
+    string origin = orig_dest[0];
+    string dest = orig_dest[1];
+    string o_airport, o_country, o_city;
+    string d_airport, d_country, d_city;
+    double latitude, longitude, distance;
+    vector<vector<string>> res;
+
+    // Origin inputs
+    if (origin == "Airports") {
+        cout << "Origin Airport: ";
+        cin >> o_airport;
+    }
+    else if (origin == "Cities") {
+        cout << "Origin Country: ";
+        cin >> o_country;
+        cout << endl << "Origin City: ";
+        cin >> o_city;
+    }
+    else if (origin == "Coordinates") {
+        cout << "Origin latitude: ";
+        cin >> latitude;
+        cout << endl << "Origin longitude: ";
+        cin >> longitude;
+        cout << endl << "Distance from Origin: ";
+        cin >> distance;
+    }
+
+    // Destination inputs
+    if (dest == "Airports") {
+        cout << "Destination Airport: ";
+        cin >> d_airport;
+    }
+    else if (dest == "Cities") {
+        cout << "Destination Country: ";
+        cin >> d_country;
+        cout << endl << "Destination City: ";
+        cin >> d_city;
+    }
+    vector<string> airlines = airlinesOptionsMenu(m);
+    Manager::InputType o_input = getInputType(origin);
+    Manager::InputType d_input = getInputType(dest);
+
+    if (origin == "Airports") {
+        if (dest == "Airports") {
+            res = m.findShortestPathConditions(o_input,d_input,"",o_airport,"",d_airport,0,0,0,airlines);
+        }
+        else if (dest == "Cities") {
+            res = m.findShortestPathConditions(o_input,d_input,"",o_airport,d_country,d_city,0,0,0,airlines);
+        }
+    }
+    else if (origin == "Cities") {
+        if (dest == "Airports") {
+            res = m.findShortestPathConditions(o_input,d_input,o_country,o_city,"",d_airport,0,0,0,airlines);
+        }
+        else if (dest == "Cities") {
+            res = m.findShortestPathConditions(o_input,d_input,o_country,o_city,d_country,d_city,0,0,0,airlines);
+        }
+    }
+    else if (origin == "Coordinates") {
+        if (dest == "Airports") {
+            res = m.findShortestPathConditions(o_input,d_input,"","","",d_airport,latitude,longitude,distance,airlines);
+        }
+        else if (dest == "Cities") {
+            res = m.findShortestPathConditions(o_input,d_input,"","",d_country,d_city,latitude,longitude,distance,airlines);
+        }
+    }
+
+    for (const auto& r : res) {
+        int count = 0;
+        for (const auto& s : r){
+            count++;
+            if(count % 2 == 0) {
+                cout << "~" << s << "~ ";
+            }
+            else{
+                cout << s << " ";}
+        }
+        cout << endl;
+        cout<<endl;
+    }
+
+}
+
+Manager::InputType getInputType(const string& inputTypeString) {
+    if (inputTypeString == "Cities") {
+        return Manager::InputType::Cities;
+    } else if (inputTypeString == "Airports") {
+        return Manager::InputType::Airports;
+    } else if (inputTypeString == "Coordinates") {
+        return Manager::InputType::Coordinates;
+    }
+}
+
+vector<string> airlinesOptionsMenu(Manager& m) {
+    vector<string> airlines;
+
+    char choice;
+    string airline;
+    cout << "Do you want to specify the airlines (y/n): " << endl;
+    cin >> choice;
+    if (choice == 'n') {return {"any"};}
+    else {
+        do {
+            cout << "Introduce the airline: " << endl;
+            cin >> airline;
+            airlines.push_back(airline);
+            cout << "Do you want to continue(y/n): " << endl;
+            cin >> choice;
+        } while (choice != 'n');
+    }
+    return airlines;
 }
 
 void airportInfoMenu(Manager& m) {

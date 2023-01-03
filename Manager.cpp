@@ -63,7 +63,7 @@ vector<string> Manager::getMinDistancePath (const vector<string>& sourceAirports
                         if (!any_airline && find(valid_airlines.begin(), valid_airlines.end(), paths[i]) != valid_airlines.end()) {
                             valid_path = true;
                         }
-                        else if (any_airline ==true){
+                        else if (any_airline == true){
                             valid_path = true;
                             break;
                         }
