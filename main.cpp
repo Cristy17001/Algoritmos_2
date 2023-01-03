@@ -48,7 +48,7 @@ int main() {
                 auto graph = manager.get_Flights();
                 string source = "YVM";
                 string target = "MPN";
-                auto random = manager.findShortestPathConditions(Manager::InputType::Airports,Manager::InputType::Airports,"France","YVM","Italy","MPN",41.248055,-8.681389,300 );
+                auto random = manager.findShortestPathConditions(Manager::InputType::Cities,Manager::InputType::Cities,"Portugal","Porto","Poland","Gdansk",41.248055,-8.681389,300,{"RYR","WZZ"});
                 for (auto r : random) {
                     int count = 0;
                     for (auto s : r){

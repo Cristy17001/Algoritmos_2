@@ -41,35 +41,59 @@ vector<string> Manager::getAirportsByCity(const string& country, const string& c
     return e;
 }
 
-pair<double, vector<string>> Manager::getMinDistancePath (const vector<string>& sourceAirports, const vector<string>& targetAirports) {
+vector<string> Manager::getMinDistancePath (const vector<string>& sourceAirports, const vector<string>& targetAirports, vector<string> valid_airlines) {
     auto graph = this->get_Flights();
+    auto aux = this->get_airport();
     pair<double, vector<string>> min_path;
     min_path.first = DBL_MAX;
     for (const auto& sourceAirport : sourceAirports) {
         for (const auto& targetAirport : targetAirports) {
             if(targetAirport != sourceAirport){
                 auto shortest_path = graph.BfsShortestPaths(sourceAirport, targetAirport);
-                auto path = graph.transformer(shortest_path)[0];
-                double distance = 0;
-                for (int i = 0; i < path.size() - 2; i+=2) {
-                    distance += haversine(
-                            this->get_airport().at(path[i]).getLatitude(),
-                            this->get_airport().at(path[i]).getLongitude(),
-                            this->get_airport().at(path[i+2]).getLatitude(),
-                            this->get_airport().at(path[i+2]).getLongitude()
-                    );
-                }
-                if (distance < min_path.first) {
-                    min_path.first = distance;
-                    min_path.second = path;
+                auto path = graph.transformer(shortest_path);
+                for (const auto& paths : path){
+
+                    // Check if the user has specified that they want to use any airline
+                    bool any_airline = find(valid_airlines.begin(), valid_airlines.end(), "any") != valid_airlines.end();
+
+                    // Check that all the airlines in the path are in the valid_airlines vector
+                    bool valid_path = any_airline;
+
+                    for (int i = 1; i<paths.size()-1; i+=2) {
+                        if (!any_airline && find(valid_airlines.begin(), valid_airlines.end(), paths[i]) != valid_airlines.end()) {
+                            valid_path = true;
+                        }
+                        else if (any_airline ==true){
+                            valid_path = true;
+                            break;
+                        }
+                        else{
+                            valid_path = false;
+                        }
+                    }
+                    if(valid_path){
+                        double distance = 0;
+                        for (int i = 0; i<paths.size()-2; i+=2){
+                            distance += haversine(
+                                    aux.at(paths[i]).getLatitude(),
+                                    aux.at(paths[i]).getLongitude(),
+                                    aux.at(paths[i+2]).getLatitude(),
+                                    aux.at(paths[i+2]).getLongitude());
+                        }
+                        if (distance < min_path.first){
+                            min_path.first = distance;
+                            min_path.second = paths;
+                        }
+                    }
                 }
             }
         }
     }
-    return min_path;
+    return min_path.second;
 }
 
-vector<vector<string>> Manager::findShortestPathConditions(InputType inputType, InputType destinationType,const string &country, const string &input,const string &countryD, const string &target, int inputLat, int inputLong, double inputDist) {
+
+vector<vector<string>> Manager::findShortestPathConditions(InputType inputType, InputType destinationType,const string &country, const string &input,const string &countryD, const string &target, double inputLat, double inputLong, double inputDist, vector<string> validAirlines) {
     auto graph = this->get_Flights();
 
     // Handle different input/destination types
@@ -80,12 +104,12 @@ vector<vector<string>> Manager::findShortestPathConditions(InputType inputType, 
                 vector<string> tAirport;
                 source.push_back(input);
                 tAirport.push_back(target);
-                return{getMinDistancePath(source,tAirport).second};
+                return{getMinDistancePath(source,tAirport,validAirlines)};
             } else {
                 // Shortest path from airport to city
                 auto sourceAirports = {input};
                 auto targetAirports = getAirportsByCity(countryD,target);
-                return {getMinDistancePath(sourceAirports, targetAirports).second};
+                return {getMinDistancePath(sourceAirports, targetAirports, validAirlines)};
             }
         }
         case Cities: {
@@ -93,12 +117,12 @@ vector<vector<string>> Manager::findShortestPathConditions(InputType inputType, 
                 // Shortest path from city to airport
                 auto sourceAirports = getAirportsByCity(country,input);
                 auto targetAirports = {target};
-                return {getMinDistancePath(sourceAirports, targetAirports).second};
+                return {getMinDistancePath(sourceAirports, targetAirports, validAirlines)};
             } else {
                 // Shortest path between two cities
                 auto sourceAirports = getAirportsByCity(country,input);
                 auto targetAirports = getAirportsByCity(countryD, target);
-                return {getMinDistancePath(sourceAirports,targetAirports).second};
+                return {getMinDistancePath(sourceAirports,targetAirports, validAirlines)};
             }
         }
         case Coordinates:{
@@ -112,10 +136,10 @@ vector<vector<string>> Manager::findShortestPathConditions(InputType inputType, 
             }
             if(destinationType == Airports){
                 auto targetAirports = {target};
-                return {getMinDistancePath(originAirports, targetAirports).second};
+                return {getMinDistancePath(originAirports, targetAirports,validAirlines)};
             }else{
                 auto targetAirports = getAirportsByCity(countryD, target);
-                return {getMinDistancePath(originAirports, targetAirports).second};
+                return {getMinDistancePath(originAirports, targetAirports,validAirlines)};
             }
         }
     }
@@ -202,23 +226,26 @@ void Manager::load_Airlines(const std::string& filename) {
 }
 
 double Manager::haversine(double lat1, double lon1, double lat2, double lon2) {
+    // convert to radians
+    lat1 *= M_PI / 180.0;
+    lon1 *= M_PI / 180.0;
+    lat2 *= M_PI / 180.0;
+    lon2 *= M_PI / 180.0;
+
     // distance between latitudes
     // and longitudes
-    double dLat = (lat2 - lat1) * M_PI / 180.0;
-    double dLon = (lon2 - lon1) * M_PI / 180.0;
-
-    // convert to radians
-    lat1 *= lat1 * M_PI / 180.0;
-    lat2 *= lat2 * M_PI / 180.0;
+    double dLat = lat2 - lat1;
+    double dLon = lon2 - lon1;
 
     // apply formula
+    const double earthRadius = 6371; // radius of the Earth in kilometers
     double a = pow(sin(dLat / 2), 2) +
                pow(sin(dLon / 2), 2) *
                cos(lat1) * cos(lat2);
-    double rad = 6371;
     double c = 2 * asin(sqrt(a));
-    return rad * c;
+    return earthRadius * c;
 }
+
 
 int Manager::diff_countrys(string airp) {
     vector<string> diff_dest = flights.diff_dest(airp);

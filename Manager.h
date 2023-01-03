@@ -7,6 +7,7 @@
 #include <fstream>
 #include <cmath>
 #include <float.h>
+#include <algorithm>
 
 // Defining the hash "constructor"
 struct PairHash {
@@ -60,9 +61,9 @@ public:
 
     vector<string> getAirportsByCity (const string& coutry, const string& city) const;
 
-    pair<double, vector<string>> getMinDistancePath (const vector<string>& sourceAirports, const vector<string>& targetAirports);
+    vector<string> getMinDistancePath (const vector<string>& sourceAirports, const vector<string>& targetAirports, vector<string> valid_airlines);
 
-    vector<vector<string>> findShortestPathConditions(InputType inputType, InputType destinationType,const string &country, const string &input,const string &countryD, const string &target, int inputLat, int inputLong, double inputDist);
+    vector<vector<string>> findShortestPathConditions(InputType inputType, InputType destinationType,const string &country, const string &input,const string &countryD, const string &target, double inputLat, double inputLong, double inputDist,vector<string> valid_airlines);
 
     void load_Flights(const std::string& filename);
     void load_Airports(const std::string& filename);
