@@ -45,7 +45,7 @@ void flightOptionsMenuDestination(Manager& m, const string& origin_type) {
             << "###############################################################################\n"
             << "#                           Flight Options Menu                               #\n"
             << "###############################################################################\n"
-            << "# Specify the type of location you of your destination:                            #\n"
+            << "# Specify the type of location you of your destination:                       #\n"
             << "# 1. Airport                                                                  #\n"
             << "# 2. City and Country                                                         #\n"
             << "# B. Back                                                                     #\n"
@@ -118,7 +118,7 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest) {
         cout << endl << "Destination City: ";
         cin >> d_city;
     }
-    vector<string> airlines = airlinesOptionsMenu(m);
+    vector<string> airlines = airlinesOptionsMenu();
     Manager::InputType o_input = getInputType(origin);
     Manager::InputType d_input = getInputType(dest);
 
@@ -173,7 +173,7 @@ Manager::InputType getInputType(const string& inputTypeString) {
     return Manager::Airports;
 }
 
-vector<string> airlinesOptionsMenu(Manager& m) {
+vector<string> airlinesOptionsMenu() {
     vector<string> airlines;
 
     char choice;
