@@ -29,7 +29,7 @@ void flightOptionsMenuOrigin(Manager& m) {
     }
 }
 
-void flightOptionsMenuDestination(Manager& m, string origin_type) {
+void flightOptionsMenuDestination(Manager& m, const string& origin_type) {
     string choice;
     cout
             << '\n'
@@ -52,7 +52,7 @@ void flightOptionsMenuDestination(Manager& m, string origin_type) {
         case '1': {
             vector<string> dest_type;
             dest_type.push_back(origin_type);
-            dest_type.push_back("Airports");
+            dest_type.emplace_back("Airports");
             flightOptionsProcess(m, dest_type);
 
             break;
@@ -60,7 +60,7 @@ void flightOptionsMenuDestination(Manager& m, string origin_type) {
         case '2': {
             vector<string> dest_type;
             dest_type.push_back(origin_type);
-            dest_type.push_back("Cities");
+            dest_type.emplace_back("Cities");
             flightOptionsProcess(m, dest_type);
             break;
         }
@@ -151,7 +151,6 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest) {
         cout << endl;
         cout<<endl;
     }
-
 }
 
 Manager::InputType getInputType(const string& inputTypeString) {
@@ -162,6 +161,7 @@ Manager::InputType getInputType(const string& inputTypeString) {
     } else if (inputTypeString == "Coordinates") {
         return Manager::InputType::Coordinates;
     }
+    return Manager::Airports;
 }
 
 vector<string> airlinesOptionsMenu(Manager& m) {

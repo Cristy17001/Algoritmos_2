@@ -8,7 +8,7 @@
 using namespace std;
 
 void flightOptionsMenuOrigin(Manager& m);
-void flightOptionsMenuDestination(Manager& m, string origin_type);
+void flightOptionsMenuDestination(Manager& m, const string& origin_type);
 void flightOptionsProcess(Manager& m, vector<string> orig_dest);
 Manager::InputType getInputType(const string& inputTypeString);
 vector<string> airlinesOptionsMenu(Manager& m);

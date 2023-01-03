@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm>
 #include "Manager.h"
 #include "Menus.h"
 
