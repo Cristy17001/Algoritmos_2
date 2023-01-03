@@ -20,9 +20,18 @@ void flightOptionsMenuOrigin(Manager& m) {
     choice = (char)toupper(choice[0]);
 
     switch (choice[0]) {
-        case '1': break;
-        case '2': break;
-        case '3': break;
+        case '1': {
+            flightOptionsMenuDestination(m, "Airports");
+            break;
+        }
+        case '2': {
+            flightOptionsMenuDestination(m, "Cities");
+            break;
+        }
+        case '3': {
+            flightOptionsMenuDestination(m, "Coordinates");
+            break;
+        }
         case 'B': break;
         case '?': {cout << endl << "Error: Invalid input. Please enter one character." << endl << endl; break;}
         default : {cout << endl << "Error: Invalid input. Please enter a valid choice." << endl << endl; break;}
