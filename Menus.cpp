@@ -152,21 +152,7 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
         }
     }
 
-    for (const auto& r : res) {
-        cout<<endl;
-        for (int i = 0; i<r.size();i++){
-            if(i % 2 != 0 && i != r.size()-1 && i !=0 && i != r.size()-2 ) {
-                cout << "~[" << r[i] << "]~";
-            }
-            else if (i == r.size()-1){
-                cout<<endl<<"Distance: "<<r[i]<<" Km";
-            }
-            else{
-                cout << r[i];}
-        }
-        cout << endl;
-        cout<<endl;
-    }
+    tablePrint(res);
 }
 
 Manager::InputType getInputType(const string& inputTypeString) {
@@ -187,6 +173,7 @@ vector<string> airlinesOptionsMenu() {
     string airline;
     cout<< endl << "Do you want to specify the airlines (y/n): ";
     cin >> choice;
+    cout << endl;
     if (choice == 'n') {return {"any"};}
     else {
         do {
@@ -294,4 +281,71 @@ void y_flights(Manager& m) {
     if (!verify_int) {
         cout << "ERROR: Please introduce a valid integer value!" << endl;
     }
+}
+
+wstring centerString(const wstring& s, int width) {
+    int padding = max(0, (width - (int)s.length()) / 2);
+    wstring result = s;
+    result = wstring(padding, ' ') + s + wstring(padding+(width-(2*padding+(int)s.length())), ' ');
+    return result;
+}
+
+void tablePrint(const vector<vector<string>>& paths) {
+    _setmode(_fileno(stdout), _O_WTEXT);
+    size_t n_cols = paths[0].size();
+    size_t n_rows = paths.size();
+
+    // First line
+    wstring start_line;
+    wstring start_pattern = L"┳━━━━━";
+    for (int i = 0; i < n_cols-2; i++) {start_line += start_pattern;}
+    wcout << L"┏━━━━━" << start_line << L"┳━━━━━━━━━━┓" << endl;
+
+    // Header line
+    wstring code = L"Code ┃";
+    wstring airplane = L" AIR ┃";
+    wstring header = L"┃Start┃";
+    bool alternate = true;
+    for (int i = 0; i < n_cols-3; i++) {
+        if (alternate) {header += airplane;}
+        else {header += code;}
+        alternate = !alternate;
+    }
+    header += L" End ┃ Distance ┃";
+    wcout << header << endl;
+
+    // Mid lines
+    wstring mid_line;
+    wstring mid_pattern = L"╋━━━━━";
+    for (int i = 0; i < n_cols-2; i++) {mid_line += mid_pattern;}
+    mid_line = L"┣━━━━━" + mid_line + L"╋━━━━━━━━━━┫";
+    wcout << mid_line << endl;
+
+    // Final line
+    wstring final_line;
+    wstring final_pattern = L"┻━━━━━";
+    for (int i = 0; i < n_cols-2; i++) {final_line += final_pattern;}
+
+    for (int i = 0; i < n_rows; i++) {
+        wcout << L"┃";
+        for (int j = 0; j < n_cols; j++) {
+            wstring_convert<codecvt_utf8<wchar_t>> converter;
+            wstring wstr = converter.from_bytes(paths[i][j]);
+            if (n_cols-1 == j) {
+                wstr = centerString(wstr, 8);
+            }
+            wcout << L" " + wstr + L" ┃";
+        }
+
+        wcout << endl;
+        if (i != n_rows-1) {
+            wcout << mid_line << endl;
+        }
+    }
+
+    // Final line
+    wcout << L"┗━━━━━" << final_line << L"┻━━━━━━━━━━┛" << endl;
+
+
+    _setmode(_fileno(stdout), _O_TEXT);
 }

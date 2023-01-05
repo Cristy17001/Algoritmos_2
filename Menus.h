@@ -3,6 +3,11 @@
 
 #include <iostream>
 #include <string>
+#include <fcntl.h>
+#include <io.h>
+#include <vector>
+#include <locale>
+#include <codecvt>
 #include "Manager.h"
 
 using namespace std;
@@ -15,5 +20,7 @@ vector<string> airlinesOptionsMenu();
 void airportInfoMenu(Manager& m);
 void general_information(Manager& m);
 void y_flights(Manager& m);
+void tablePrint(const vector<vector<string>>& paths);
+wstring centerString(const wstring& s, int width);
 
 #endif //TRABALHO_ALGORITMOS_2_MENUS_H
