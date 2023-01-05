@@ -89,7 +89,7 @@ vector<string> Manager::getMinDistancePath (const vector<string>& sourceAirports
             }
         }
     }
-    min_path.second.push_back(to_string(min_path.first));
+    min_path.second.push_back(to_string((int) floor(min_path.first)));
     return min_path.second;
 }
 
@@ -132,7 +132,7 @@ vector<vector<string>> Manager::getMinPathCombinations (const vector<string>& so
                                     aux.at(paths[i+2]).getLongitude());
                         }
                         pair<double, vector<string>> aux_pair(distance, paths);
-                        aux_pair.second.push_back(to_string(aux_pair.first));
+                        aux_pair.second.push_back(to_string((int) floor(aux_pair.first)));
                         path_combination.push_back(aux_pair.second);
                     }
                 }

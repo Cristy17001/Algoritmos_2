@@ -9,6 +9,7 @@
 #include <cmath>
 #include <float.h>
 #include <algorithm>
+#include <cmath>
 
 // Defining the hash "constructor"
 struct PairHash {
