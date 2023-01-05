@@ -16,7 +16,8 @@ int main() {
         << "###############################################################################\n"
         << "# Please choose an option:                                                    #\n"
         << "# 1. Find shortest path between two locations                                 #\n"
-        << "# 2. Get information about an airport                                         #\n"
+        << "# 2. Find all the possible paths between two locations                        #\n"
+        << "# 3. Get information about an airport                                         #\n"
         << "# Q. Quit                                                                     #\n"
         << "###############################################################################\n"
         << "#> ";
@@ -27,9 +28,12 @@ int main() {
 
         switch (choice[0]) {
             case '1': {
-                flightOptionsMenuOrigin(manager);
+                flightOptionsMenuOrigin(manager,false);
                 break;}
-            case '2': {airportInfoMenu(manager); break;}
+            case '2': {
+                flightOptionsMenuOrigin(manager, true);
+                break;}
+            case '3': {airportInfoMenu(manager); break;}
             case 'Q': break;
             case '?': {cout << endl << "Error: Invalid input. Please enter one character." << endl << endl; break;}
             default : {cout << endl << "Error: Invalid input. Please enter a valid choice." << endl << endl; break;}

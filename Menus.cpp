@@ -1,6 +1,6 @@
 #include "Menus.h"
 
-void flightOptionsMenuOrigin(Manager& m) {
+void flightOptionsMenuOrigin(Manager& m,bool combination) {
     string choice;
     cout
             << '\n'
@@ -21,15 +21,15 @@ void flightOptionsMenuOrigin(Manager& m) {
 
     switch (choice[0]) {
         case '1': {
-            flightOptionsMenuDestination(m, "Airports");
+            flightOptionsMenuDestination(m, "Airports",combination);
             break;
         }
         case '2': {
-            flightOptionsMenuDestination(m, "Cities");
+            flightOptionsMenuDestination(m, "Cities",combination);
             break;
         }
         case '3': {
-            flightOptionsMenuDestination(m, "Coordinates");
+            flightOptionsMenuDestination(m, "Coordinates",combination);
             break;
         }
         case 'B': break;
@@ -38,7 +38,7 @@ void flightOptionsMenuOrigin(Manager& m) {
     }
 }
 
-void flightOptionsMenuDestination(Manager& m, const string& origin_type) {
+void flightOptionsMenuDestination(Manager& m, const string& origin_type, bool combination) {
     string choice;
     cout
             << '\n'
@@ -62,7 +62,7 @@ void flightOptionsMenuDestination(Manager& m, const string& origin_type) {
             vector<string> dest_type;
             dest_type.push_back(origin_type);
             dest_type.emplace_back("Airports");
-            flightOptionsProcess(m, dest_type);
+            flightOptionsProcess(m, dest_type,combination);
 
             break;
         }
@@ -70,7 +70,7 @@ void flightOptionsMenuDestination(Manager& m, const string& origin_type) {
             vector<string> dest_type;
             dest_type.push_back(origin_type);
             dest_type.emplace_back("Cities");
-            flightOptionsProcess(m, dest_type);
+            flightOptionsProcess(m, dest_type,combination);
             break;
         }
         case 'B': break;
@@ -79,7 +79,7 @@ void flightOptionsMenuDestination(Manager& m, const string& origin_type) {
     }
 }
 
-void flightOptionsProcess(Manager& m, vector<string> orig_dest) {
+void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination) {
     string origin = orig_dest[0];
     string dest = orig_dest[1];
     string o_airport, o_country, o_city;
@@ -89,16 +89,19 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest) {
 
     // Origin inputs
     if (origin == "Airports") {
+        cout << '\n'<<'\n';
         cout << "Origin Airport: ";
         cin >> o_airport;
     }
     else if (origin == "Cities") {
+        cout << '\n'<<'\n';
         cout << "Origin Country: ";
         cin >> o_country;
         cout << endl << "Origin City: ";
         cin >> o_city;
     }
     else if (origin == "Coordinates") {
+        cout << '\n'<<'\n';
         cout << "Origin latitude: ";
         cin >> latitude;
         cout << endl << "Origin longitude: ";
@@ -109,10 +112,12 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest) {
 
     // Destination inputs
     if (dest == "Airports") {
+        cout << '\n';
         cout << "Destination Airport: ";
         cin >> d_airport;
     }
     else if (dest == "Cities") {
+        cout << '\n';
         cout << "Destination Country: ";
         cin >> d_country;
         cout << endl << "Destination City: ";
@@ -124,38 +129,40 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest) {
 
     if (origin == "Airports") {
         if (dest == "Airports") {
-            res = m.findShortestPathConditions(o_input,d_input,"",o_airport,"",d_airport,0,0,0,airlines);
+            res = m.findShortestPathConditions(o_input,d_input,"",o_airport,"",d_airport,0,0,0,airlines,combination);
         }
         else if (dest == "Cities") {
-            res = m.findShortestPathConditions(o_input,d_input,"",o_airport,d_country,d_city,0,0,0,airlines);
+            res = m.findShortestPathConditions(o_input,d_input,"",o_airport,d_country,d_city,0,0,0,airlines,combination);
         }
     }
     else if (origin == "Cities") {
         if (dest == "Airports") {
-            res = m.findShortestPathConditions(o_input,d_input,o_country,o_city,"",d_airport,0,0,0,airlines);
+            res = m.findShortestPathConditions(o_input,d_input,o_country,o_city,"",d_airport,0,0,0,airlines,combination);
         }
         else if (dest == "Cities") {
-            res = m.findShortestPathConditions(o_input,d_input,o_country,o_city,d_country,d_city,0,0,0,airlines);
+            res = m.findShortestPathConditions(o_input,d_input,o_country,o_city,d_country,d_city,0,0,0,airlines,combination);
         }
     }
     else if (origin == "Coordinates") {
         if (dest == "Airports") {
-            res = m.findShortestPathConditions(o_input,d_input,"","","",d_airport,latitude,longitude,distance,airlines);
+            res = m.findShortestPathConditions(o_input,d_input,"","","",d_airport,latitude,longitude,distance,airlines,combination);
         }
         else if (dest == "Cities") {
-            res = m.findShortestPathConditions(o_input,d_input,"","",d_country,d_city,latitude,longitude,distance,airlines);
+            res = m.findShortestPathConditions(o_input,d_input,"","",d_country,d_city,latitude,longitude,distance,airlines,combination);
         }
     }
 
     for (const auto& r : res) {
-        int count = 0;
-        for (const auto& s : r){
-            count++;
-            if(count % 2 == 0) {
-                cout << "~" << s << "~ ";
+        cout<<endl;
+        for (int i = 0; i<r.size();i++){
+            if(i % 2 != 0 && i != r.size()-1 && i !=0 && i != r.size()-2 ) {
+                cout << "~[" << r[i] << "]~";
+            }
+            else if (i == r.size()-1){
+                cout<<endl<<"Distance: "<<r[i]<<" Km";
             }
             else{
-                cout << s << " ";}
+                cout << r[i];}
         }
         cout << endl;
         cout<<endl;
@@ -178,15 +185,15 @@ vector<string> airlinesOptionsMenu() {
 
     char choice;
     string airline;
-    cout << "Do you want to specify the airlines (y/n): " << endl;
+    cout<< endl << "Do you want to specify the airlines (y/n): ";
     cin >> choice;
     if (choice == 'n') {return {"any"};}
     else {
         do {
-            cout << "Introduce the airline: " << endl;
+            cout <<endl<< "Introduce the airline: ";
             cin >> airline;
             airlines.push_back(airline);
-            cout << "Do you want to continue(y/n): " << endl;
+            cout <<endl << "Do you want to continue(y/n): ";
             cin >> choice;
         } while (choice != 'n');
     }

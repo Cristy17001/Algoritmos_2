@@ -1,6 +1,7 @@
 #ifndef TRABALHO_ALGORITMOS_2_MANAGER_H
 #define TRABALHO_ALGORITMOS_2_MANAGER_H
 
+
 #include "FlightGraph.h"
 #include "Airport.h"
 #include "Airlines.h"
@@ -63,7 +64,9 @@ public:
 
     vector<string> getMinDistancePath (const vector<string>& sourceAirports, const vector<string>& targetAirports, vector<string> valid_airlines);
 
-    vector<vector<string>> findShortestPathConditions(InputType inputType, InputType destinationType,const string &country, const string &input,const string &countryD, const string &target, double inputLat, double inputLong, double inputDist,vector<string> valid_airlines);
+    vector<vector<string>> getMinPathCombinations (const vector<string>& sourceAirports, const vector<string>& targetAirports, vector<string> valid_airlines);
+
+    vector<vector<string>> findShortestPathConditions(InputType inputType, InputType destinationType,const string &country, const string &input,const string &countryD, const string &target, double inputLat, double inputLong, double inputDist,vector<string> valid_airlines, bool combination);
 
     void load_Flights(const std::string& filename);
     void load_Airports(const std::string& filename);
