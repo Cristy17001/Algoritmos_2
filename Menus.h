@@ -10,6 +10,7 @@
 #include <codecvt>
 #include "Manager.h"
 
+
 using namespace std;
 
 void flightOptionsMenuOrigin(Manager& m, bool combination);

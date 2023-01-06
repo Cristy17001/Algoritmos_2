@@ -91,35 +91,55 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
     auto airportmap = m.get_airport();
     auto country_city_map = m.get_cities_to_airports();
 
+
     // Origin inputs
     if (origin == "Airports") {
-        cout << '\n'<<'\n';
+        do{
+        cout << '\n';
         cout << "Origin Airport: ";
         cin >> o_airport;
         for (char& c : o_airport) {
             c = toupper(c);
         }
+        if(airportmap.find(o_airport) == airportmap.end()){
+            cout <<endl<<"Enter a valid airport"<<endl;
+        }
+        }
+        while (airportmap.find(o_airport) == airportmap.end());
 
     }
     else if (origin == "Cities") {
-        cout << '\n'<<'\n';
-        cout << "Origin Country: ";
-        cin >> o_country;
-        o_country[0] = toupper(o_country[0]);
-        for (int i = 1; i < o_country.size(); i++) {
-            o_country[i] = tolower(o_country[i]);
-        }
-        cout << endl << "Origin City: ";
-        cin >> o_city;
+        bool found = false;
+        do {
+            cout << '\n';
+            cout << "Origin Country: ";
+            cin >> o_country;
+            o_country[0] = toupper(o_country[0]);
+            for (int i = 1; i < o_country.size(); i++) {
+                o_country[i] = tolower(o_country[i]);
+            }
+            cout << endl << "Origin City: ";
+            cin >> o_city;
 
-        o_city[0] = toupper(o_city[0]);
-        for (int i = 1; i < o_city.size(); i++) {
-            o_city[i] = tolower(o_city[i]);
-        }
+            o_city[0] = toupper(o_city[0]);
+            for (int i = 1; i < o_city.size(); i++) {
+                o_city[i] = tolower(o_city[i]);
+            }
 
+            pair<string, string> city_pair = {o_country, o_city};
+            auto it = country_city_map.find(city_pair);
+            if (it != country_city_map.end()) {
+                found = true;
+            }else{
+                cout <<endl<< "Country/city not found" << endl;
+                found = false;
+            }
+        }
+        while(!found);
     }
+
     else if (origin == "Coordinates") {
-        cout << '\n'<<'\n';
+        cout << '\n';
         cout << "Origin latitude: ";
         cin >> latitude;
         cout << endl << "Origin longitude: ";
@@ -130,14 +150,23 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
 
     // Destination inputs
     if (dest == "Airports") {
+        do{
         cout << '\n';
         cout << "Destination Airport: ";
         cin >> d_airport;
         for (char& c : d_airport) {
             c = toupper(c);
         }
+        if(airportmap.find(d_airport) == airportmap.end()){
+            cout <<endl<<"Enter a valid airport"<<endl;
+        }
+
+        }
+        while(airportmap.find(d_airport) == airportmap.end());
     }
     else if (dest == "Cities") {
+        bool found = false;
+        do{
         cout << '\n';
         cout << "Destination Country: ";
         cin >> d_country;
@@ -151,6 +180,17 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
         for (int i = 1; i < d_city.size(); i++) {
             d_city[i] = tolower(d_city[i]);
         }
+        pair<string, string> city_pair = {d_country, d_city};
+        auto it = country_city_map.find(city_pair);
+        if (it != country_city_map.end()) {
+            found = true;
+        }
+        else{
+            cout <<endl<< "Country/city not found" << endl;
+            found = false;
+        }
+        }
+        while(!found);
     }
     vector<string> airlines = airlinesOptionsMenu(m);
     Manager::InputType o_input = getInputType(origin);
