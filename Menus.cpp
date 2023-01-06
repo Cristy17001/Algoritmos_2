@@ -240,31 +240,48 @@ Manager::InputType getInputType(const string& inputTypeString) {
 vector<string> airlinesOptionsMenu(Manager& m) {
     vector<string> airlines;
     auto airlinemap = m.get_airlines();
-    char choice;
-    string airline;
+    string choice;
     cout << endl << "Do you want to specify the airlines (y/n): ";
     cin >> choice;
-    choice = tolower(choice);
+    if (choice.size() > 1) {choice.clear(); choice[0] = '?';}
+    choice = (char)toupper(choice[0]);
     cout << endl;
-    if (choice == 'n') { return {"any"}; }
-    else {
-        do {
-            cout << "Introduce the airline: ";
-            cin >> airline;
-            for (char &c: airline) {
-                c = toupper(c);
-            }
-            if (airlinemap.find(airline) == airlinemap.end()) {
-                cout << "Error: airline not found" << endl;
-            } else {
-                airlines.push_back(airline);
-                cout << endl << "Do you want to continue(y/n): ";
-                cin >> choice;
-                choice = tolower(choice);
-                cout << endl;
-            }
-        } while (choice != 'n');
-        return airlines;
+
+    string airline;
+
+    switch (choice[0]) {
+        case 'N': {
+            return {"any"};
+        }
+        case 'Y': {
+            do {
+                cout << "Introduce the airline: ";
+                cin >> airline;
+                for (char &c: airline) {
+                    c = (char)toupper(c);
+                }
+                if (airlinemap.find(airline) == airlinemap.end()) {
+                    cout << "Error: airline not found" << endl;
+                } else {
+                    airlines.push_back(airline);
+                    cout << endl << "Do you want to continue(y/n): ";
+                    cin >> choice;
+                    if (choice.size() > 1) {choice.clear(); choice[0] = '?';}
+                    choice = (char)toupper(choice[0]);
+                    if (choice[0] != 'Y') {
+                        cout << "Invalid Character.('No' was considered)" << endl;
+                        return airlines;
+                    }
+                    cout << endl;
+                }
+            } while (choice[0] != 'N');
+            return airlines;
+        }
+        default:{
+            cout << "Invalid Character!('No' was considered)" << endl;
+            return {"any"};
+        }
+
     }
 }
 
@@ -386,21 +403,21 @@ void tablePrint(const vector<vector<string>>& paths) {
 
     // First line
     wstring start_line;
-    wstring start_pattern = L"┳━━━━━";
+    wstring start_pattern = L"╦═════";
     for (int i = 0; i < n_cols-2; i++) {start_line += start_pattern;}
-    wcout << L"┏━━━━━" << start_line << L"┳━━━━━━━━━━┓" << endl;
+    wcout << L"╔═════" << start_line << L"╦══════════╗" << endl;
 
     // Header line
-    wstring code = L"Code ┃";
-    wstring airplane = L" AIR ┃";
-    wstring header = L"┃Start┃";
+    wstring code = L"Code ║";
+    wstring airplane = L" AIR ║";
+    wstring header = L"║Start║";
     bool alternate = true;
     for (int i = 0; i < n_cols-3; i++) {
         if (alternate) {header += airplane;}
         else {header += code;}
         alternate = !alternate;
     }
-    header += L" End ┃ Distance ┃";
+    header += L" End ║ Distance ║";
     wcout << header << endl;
 
     // Mid lines
