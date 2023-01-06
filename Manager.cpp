@@ -41,99 +41,62 @@ vector<string> Manager::getAirportsByCity(const string& country, const string& c
     return e;
 }
 
-vector<string> Manager::getMinDistancePath (const vector<string>& sourceAirports, const vector<string>& targetAirports, vector<string> valid_airlines) {
-    auto graph = this->get_Flights();
-    auto aux = this->get_airport();
-    pair<double, vector<string>> min_path;
-    min_path.first = DBL_MAX;
-    for (const auto& sourceAirport : sourceAirports) {
-        for (const auto& targetAirport : targetAirports) {
-            if(targetAirport != sourceAirport){
-                auto shortest_path = graph.BfsShortestPaths(sourceAirport, targetAirport);
-                auto path = graph.transformer(shortest_path);
-                for (const auto& paths : path){
-
-                    // Check if the user has specified that they want to use any airline
-                    bool any_airline = find(valid_airlines.begin(), valid_airlines.end(), "any") != valid_airlines.end();
-
-                    // Check that all the airlines in the path are in the valid_airlines vector
-                    bool valid_path = any_airline;
-
-                    for (int i = 1; i<paths.size()-1; i+=2) {
-                        if (!any_airline && find(valid_airlines.begin(), valid_airlines.end(), paths[i]) != valid_airlines.end()) {
-                            valid_path = true;
-                        }
-                        else if (any_airline == true){
-                            valid_path = true;
-                            break;
-                        }
-                        else{
-                            valid_path = false;
-                        }
-                    }
-                    if(valid_path){
-                        double distance = 0;
-                        for (int i = 0; i<paths.size()-2; i+=2){
-                            distance += haversine(
-                                    aux.at(paths[i]).getLatitude(),
-                                    aux.at(paths[i]).getLongitude(),
-                                    aux.at(paths[i+2]).getLatitude(),
-                                    aux.at(paths[i+2]).getLongitude());
-                        }
-                        if (distance < min_path.first){
-                            min_path.first = distance;
-                            min_path.second = paths;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    min_path.second.push_back(to_string((int) floor(min_path.first)));
-    return min_path.second;
-}
-
-vector<vector<string>> Manager::getMinPathCombinations (const vector<string>& sourceAirports, const vector<string>& targetAirports, vector<string> valid_airlines) {
+vector<vector<string>> Manager::getMinPathCombinations (const vector<string>& sourceAirports, const vector<string>& targetAirports, vector<string> valid_airlines, bool combination) {
     auto graph = this->get_Flights();
     auto aux = this->get_airport();
     vector<vector<string>> path_combination;
     for (const auto& sourceAirport : sourceAirports) {
         for (const auto& targetAirport : targetAirports) {
-            if(targetAirport != sourceAirport){
+            if (targetAirport != sourceAirport) {
                 auto shortest_path = graph.BfsShortestPaths(sourceAirport, targetAirport);
                 auto path = graph.transformer(shortest_path);
-                for (const auto& paths : path){
+                for (auto& paths : path) {
 
                     // Check if the user has specified that they want to use any airline
-                    bool any_airline = find(valid_airlines.begin(), valid_airlines.end(), "any") != valid_airlines.end();
+                    bool any_airline = (valid_airlines[0] == "any");
 
                     // Check that all the airlines in the path are in the valid_airlines vector
                     bool valid_path = any_airline;
 
-                    for (int i = 1; i<paths.size()-1; i+=2) {
+                    for (int i = 1; i < paths.size()-1; i+=2) {
                         if (!any_airline && find(valid_airlines.begin(), valid_airlines.end(), paths[i]) != valid_airlines.end()) {
                             valid_path = true;
                         }
-                        else if (any_airline == true){
+                        else if (any_airline) {
                             valid_path = true;
                             break;
                         }
-                        else{
+                        else {
                             valid_path = false;
+                            break;
                         }
                     }
-                    if(valid_path){
+                    if (valid_path) {
                         double distance = 0;
-                        for (int i = 0; i<paths.size()-2; i+=2){
+                        for (int i = 0; i < paths.size()-2; i+=2){
                             distance += haversine(
                                     aux.at(paths[i]).getLatitude(),
                                     aux.at(paths[i]).getLongitude(),
                                     aux.at(paths[i+2]).getLatitude(),
                                     aux.at(paths[i+2]).getLongitude());
                         }
-                        pair<double, vector<string>> aux_pair(distance, paths);
-                        aux_pair.second.push_back(to_string((int) floor(aux_pair.first)));
-                        path_combination.push_back(aux_pair.second);
+                        if (!combination) {
+                            int size_zero = 1;
+                            int dist_verification;
+                            if (!path_combination.empty()) {
+                                size_zero = path_combination[0].size();
+                                dist_verification = stoi(path_combination[0][size_zero - 1]);
+                            }
+                            if (path_combination.empty() or dist_verification > distance) {
+                                path_combination.clear();
+                                paths.push_back(to_string((int) floor(distance)));
+                                path_combination.push_back(paths);
+                            }
+                        }
+                        else {
+                            paths.push_back(to_string((int) floor(distance)));
+                            path_combination.push_back(paths);
+                        }
                     }
                 }
             }
@@ -143,7 +106,7 @@ vector<vector<string>> Manager::getMinPathCombinations (const vector<string>& so
 }
 
 
-vector<vector<string>> Manager::findShortestPathConditions(InputType inputType, InputType destinationType,const string &country, const string &input,const string &countryD, const string &target, double inputLat, double inputLong, double inputDist, vector<string> validAirlines,bool combination) {
+vector<vector<string>> Manager::findShortestPathConditions(InputType inputType, InputType destinationType,const string &country, const string &input,const string &countryD, const string &target, double inputLat, double inputLong, double inputDist, const vector<string>& validAirlines, bool combination) {
     auto graph = this->get_Flights();
 
     // Handle different input/destination types
@@ -154,18 +117,13 @@ vector<vector<string>> Manager::findShortestPathConditions(InputType inputType, 
                 vector<string> tAirport;
                 source.push_back(input);
                 tAirport.push_back(target);
-                if (combination){
-                    return {getMinPathCombinations(source,tAirport,validAirlines)};
-                }
-                return{getMinDistancePath(source,tAirport,validAirlines)};
+                return {getMinPathCombinations(source,tAirport,validAirlines, combination)};
             } else {
                 // Shortest path from airport to city
                 auto sourceAirports = {input};
                 auto targetAirports = getAirportsByCity(countryD,target);
-                if (combination){
-                    return {getMinPathCombinations(sourceAirports,targetAirports,validAirlines)};
-                }
-                return {getMinDistancePath(sourceAirports, targetAirports, validAirlines)};
+                return {getMinPathCombinations(sourceAirports,targetAirports,validAirlines, combination)};
+
             }
         }
         case Cities: {
@@ -173,45 +131,33 @@ vector<vector<string>> Manager::findShortestPathConditions(InputType inputType, 
                 // Shortest path from city to airport
                 auto sourceAirports = getAirportsByCity(country,input);
                 auto targetAirports = {target};
-                if (combination){
-                    return {getMinPathCombinations(sourceAirports,targetAirports,validAirlines)};
-                }
-                return {getMinDistancePath(sourceAirports, targetAirports, validAirlines)};
+                return {getMinPathCombinations(sourceAirports,targetAirports,validAirlines, combination)};
             } else {
                 // Shortest path between two cities
                 auto sourceAirports = getAirportsByCity(country,input);
                 auto targetAirports = getAirportsByCity(countryD, target);
-                if (combination){
-                    return {getMinPathCombinations(sourceAirports,targetAirports,validAirlines)};
-                }
-                return {getMinDistancePath(sourceAirports,targetAirports, validAirlines)};
+                return {getMinPathCombinations(sourceAirports,targetAirports,validAirlines, combination)};
             }
         }
-        case Coordinates:{
+        case Coordinates: {
             vector<string> originAirports;
             for (const auto& airport_pair : this->get_airport()) {
                 const auto& code = airport_pair.first;
                 const auto& airport = airport_pair.second;
-                if(haversine(airport.getLatitude(),airport.getLongitude(),inputLat,inputLong) < inputDist){
+                if (haversine(airport.getLatitude(),airport.getLongitude(),inputLat,inputLong) < inputDist){
                     originAirports.push_back(code);
                 }
             }
-            if(destinationType == Airports){
+            if (destinationType == Airports){
                 auto targetAirports = {target};
-                if (combination){
-                    return {getMinPathCombinations(originAirports,targetAirports,validAirlines)};
-                }
-                return {getMinDistancePath(originAirports, targetAirports,validAirlines)};
-            }else{
+                return {getMinPathCombinations(originAirports,targetAirports,validAirlines, combination)};
+            } else {
                 auto targetAirports = getAirportsByCity(countryD, target);
-                if (combination){
-                    return {getMinPathCombinations(originAirports,targetAirports,validAirlines)};
-                }
-                return {getMinDistancePath(originAirports, targetAirports,validAirlines)};
+                return {getMinPathCombinations(originAirports, targetAirports, validAirlines, combination)};
             }
         }
     }
-}
+ }
 
 
 void Manager::load_Flights(const std::string& filename) {

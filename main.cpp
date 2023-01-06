@@ -11,7 +11,7 @@ int main() {
         _setmode(_fileno(stdout), _O_WTEXT);
         wcout <<'\n'
         << L"╔═════════════════════════════════════════════════════════════════════════════╗\n"
-        << L"║                           ✈✈Flight Manager✈✈                           ║\n"
+        << L"║                               Flight Manager                                ║\n"
         << L"╠═════════════════════════════════════════════════════════════════════════════╣\n"
         << L"║ Please choose an option:                                                    ║\n"
         << L"║ 1. Find shortest path between two locations                                 ║\n"

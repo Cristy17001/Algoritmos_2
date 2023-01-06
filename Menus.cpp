@@ -5,7 +5,7 @@ void flightOptionsMenuOrigin(Manager& m,bool combination) {
     _setmode(_fileno(stdout), _O_WTEXT);
     wcout << '\n'
             << L"╔═════════════════════════════════════════════════════════════════════════════╗\n"
-            << L"║                         ✈✈Flight Options Menu✈✈                        ║\n"
+            << L"║                           Flight Options Menu                               ║\n"
             << L"╠═════════════════════════════════════════════════════════════════════════════╣\n"
             << L"║ Specify the type of location you of your origin:                            ║\n"
             << L"║ 1. Airport                                                                  ║\n"
@@ -44,7 +44,7 @@ void flightOptionsMenuDestination(Manager& m, const string& origin_type, bool co
     _setmode(_fileno(stdout), _O_WTEXT);
     wcout << '\n'
             << L"╔═════════════════════════════════════════════════════════════════════════════╗\n"
-            << L"║                         ✈✈Flight Options Menu✈✈                        ║\n"
+            << L"║                           Flight Options Menu                               ║\n"
             << L"╠═════════════════════════════════════════════════════════════════════════════╣\n"
             << L"║ Specify the type of location you of your destination:                       ║\n"
             << L"║ 1. Airport                                                                  ║\n"
@@ -180,8 +180,10 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
             res = m.findShortestPathConditions(o_input,d_input,"","",d_country,d_city,latitude,longitude,distance,airlines,combination);
         }
     }
-
-    tablePrint(res);
+    if (res.empty())  {
+        cout << endl << "Couldn't find any path with those airlines!" << endl;
+    }
+    else tablePrint(res);
 }
 
 Manager::InputType getInputType(const string& inputTypeString) {
@@ -228,7 +230,7 @@ void airportInfoMenu(Manager& m) {
     _setmode(_fileno(stdout), _O_WTEXT);
     wcout << '\n'
             << L"╔═════════════════════════════════════════════════════════════════════════════╗\n"
-            << L"║                      ✈✈Airport Information Menu✈✈                      ║\n"
+            << L"║                          Airport Information Menu                           ║\n"
             << L"╠═════════════════════════════════════════════════════════════════════════════╣\n"
             << L"║ Please choose an option:                                                    ║\n"
             << L"║ 1. General information's about an airport                                   ║\n"

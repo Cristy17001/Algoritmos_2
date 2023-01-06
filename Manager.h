@@ -65,11 +65,9 @@ public:
 
     vector<string> getAirportsByCity (const string& coutry, const string& city) const;
 
-    vector<string> getMinDistancePath (const vector<string>& sourceAirports, const vector<string>& targetAirports, vector<string> valid_airlines);
+    vector<vector<string>> getMinPathCombinations (const vector<string>& sourceAirports, const vector<string>& targetAirports, vector<string> valid_airlines, bool combination);
 
-    vector<vector<string>> getMinPathCombinations (const vector<string>& sourceAirports, const vector<string>& targetAirports, vector<string> valid_airlines);
-
-    vector<vector<string>> findShortestPathConditions(InputType inputType, InputType destinationType,const string &country, const string &input,const string &countryD, const string &target, double inputLat, double inputLong, double inputDist,vector<string> valid_airlines, bool combination);
+    vector<vector<string>> findShortestPathConditions(InputType inputType, InputType destinationType,const string &country, const string &input,const string &countryD, const string &target, double inputLat, double inputLong, double inputDist,const vector<string>& valid_airlines, bool combination);
 
     void load_Flights(const std::string& filename);
     void load_Airports(const std::string& filename);
