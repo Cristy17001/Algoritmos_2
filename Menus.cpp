@@ -242,26 +242,30 @@ vector<string> airlinesOptionsMenu(Manager& m) {
     auto airlinemap = m.get_airlines();
     char choice;
     string airline;
-    cout<< endl << "Do you want to specify the airlines (y/n): ";
+    cout << endl << "Do you want to specify the airlines (y/n): ";
     cin >> choice;
+    choice = tolower(choice);
     cout << endl;
-    if (choice == 'n') {return {"any"};}
+    if (choice == 'n') { return {"any"}; }
     else {
         do {
-            cout <<endl<< "Introduce the airline: ";
+            cout << "Introduce the airline: ";
             cin >> airline;
-            for (char& c : airline) {
+            for (char &c: airline) {
                 c = toupper(c);
             }
-            if(airlinemap.find(airline) == airlinemap.end()){
+            if (airlinemap.find(airline) == airlinemap.end()) {
                 cout << "Error: airline not found" << endl;
-            } else{
-            airlines.push_back(airline);
-            cout <<endl << "Do you want to continue(y/n): ";
-            cin >> choice;}
+            } else {
+                airlines.push_back(airline);
+                cout << endl << "Do you want to continue(y/n): ";
+                cin >> choice;
+                choice = tolower(choice);
+                cout << endl;
+            }
         } while (choice != 'n');
+        return airlines;
     }
-    return airlines;
 }
 
 void airportInfoMenu(Manager& m) {
@@ -305,10 +309,11 @@ void general_information(Manager& m) {
     cout << "\nIntroduce the airport code: " << endl;
     cout << "#> ";
     cin >> code;
-
+    for (char& c : code) {
+        c = toupper(c);
+    }
     auto flights = m.get_Flights();
     auto airports = m.get_airport();
-
     auto it = airports.find(code);
     if (it != airports.end()) {
         int n_flights = flights.n_flights(code);
@@ -321,9 +326,9 @@ void general_information(Manager& m) {
         cout << "\nFrom airport " << code << " there are " << n_diff << " possible destinations!";
 
         int n_diff_countrys = m.diff_countrys(code);
-        cout << "\nFrom airport " << code << " it is possible to reach " << n_diff_countrys << " different countries!" << endl;
-    }
-    else {
+        cout << "\nFrom airport " << code << " it is possible to reach " << n_diff_countrys << " different countries!"
+             << endl;
+    } else {
         cout << "\nERROR: There is no such airport!" << endl;
     }
 }
@@ -333,6 +338,9 @@ void y_flights(Manager& m) {
     cout << "\nIntroduce the airport code: " << endl;
     cout << "#> ";
     cin >> code;
+    for (char& c : code) {
+        c = toupper(c);
+    }
 
     cout << "\nIntroduce the number of flights: " << endl;
     cout << "#> ";
@@ -354,12 +362,13 @@ void y_flights(Manager& m) {
         cout << "\nWith " << num << " flights it is possible to reach " << res[0] << " airports!";
         cout << "\nWith " << num << " flights it is possible to reach " << res[1] << " cities!";
         cout << "\nWith " << num << " flights it is possible to reach " << res[2] << " countries!";
+        cout << endl;
     }
     if (it == airports.end()) {
         cout << "\nERROR: There is no such airport!" << endl;
     }
     if (!verify_int) {
-        cout << "ERROR: Please introduce a valid integer value!" << endl;
+        cout << "\nERROR: Please introduce a valid integer value!" << endl;
     }
 }
 
