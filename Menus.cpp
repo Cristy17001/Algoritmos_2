@@ -33,8 +33,8 @@ void flightOptionsMenuOrigin(Manager& m,bool combination) {
             break;
         }
         case 'B': break;
-        case '?': {cout << endl << "Error: Invalid input. Please enter one character." << endl << endl; break;}
-        default : {cout << endl << "Error: Invalid input. Please enter a valid choice." << endl << endl; break;}
+        case '?': {cout << "\nError: Invalid input. Please enter one character.\n\n"; break;}
+        default : {cout << "\nError: Invalid input. Please enter a valid choice.\n\n"; break;}
     }
 }
 
@@ -76,8 +76,8 @@ void flightOptionsMenuDestination(Manager& m, const string& origin_type, bool co
             break;
         }
         case 'B': break;
-        case '?': {cout << endl << "Error: Invalid input. Please enter one character." << endl << endl; break;}
-        default : {cout << endl << "Error: Invalid input. Please enter a valid choice." << endl << endl; break;}
+        case '?': {cout << "\nError: Invalid input. Please enter one character.\n\n"; break;}
+        default : {cout << "\nError: Invalid input. Please enter a valid choice.\n\n"; break;}
     }
 }
 
@@ -102,7 +102,7 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
             c = toupper(c);
         }
         if(airportmap.find(o_airport) == airportmap.end()){
-            cout <<endl<<"Enter a valid airport"<<endl;
+            cout << "\nEnter a valid airport\n";
         }
         }
         while (airportmap.find(o_airport) == airportmap.end());
@@ -118,7 +118,7 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
             for (int i = 1; i < o_country.size(); i++) {
                 o_country[i] = tolower(o_country[i]);
             }
-            cout << endl << "Origin City: ";
+            cout << "\nOrigin City: ";
             cin >> o_city;
 
             o_city[0] = toupper(o_city[0]);
@@ -131,7 +131,7 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
             if (it != country_city_map.end()) {
                 found = true;
             }else{
-                cout <<endl<< "Country/city not found" << endl;
+                cout << "\nCountry/city not found\n";
                 found = false;
             }
         }
@@ -142,9 +142,9 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
         cout << '\n';
         cout << "Origin latitude: ";
         cin >> latitude;
-        cout << endl << "Origin longitude: ";
+        cout << "\nOrigin longitude: ";
         cin >> longitude;
-        cout << endl << "Distance from Origin: ";
+        cout << "\nDistance from Origin: ";
         cin >> distance;
     }
 
@@ -158,7 +158,7 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
             c = toupper(c);
         }
         if(airportmap.find(d_airport) == airportmap.end()){
-            cout <<endl<<"Enter a valid airport"<<endl;
+            cout << "\nEnter a valid airport\n";
         }
 
         }
@@ -174,7 +174,7 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
         for (int i = 1; i < d_country.size(); i++) {
             d_country[i] = tolower(d_country[i]);
         }
-        cout << endl << "Destination City: ";
+        cout << "\nDestination City: ";
         cin >> d_city;
         d_city[0] = toupper(d_city[0]);
         for (int i = 1; i < d_city.size(); i++) {
@@ -186,7 +186,7 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
             found = true;
         }
         else{
-            cout <<endl<< "Country/city not found" << endl;
+            cout << "\nCountry/city not found\n";
             found = false;
         }
         }
@@ -221,7 +221,7 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
         }
     }
     if (res.empty())  {
-        cout << endl << "Couldn't find any path with those airlines!" << endl;
+        cout << "\nCouldn't find any path with those airlines!\n";
     }
     else tablePrint(res);
 }
@@ -241,11 +241,11 @@ vector<string> airlinesOptionsMenu(Manager& m) {
     vector<string> airlines;
     auto airlinemap = m.get_airlines();
     string choice;
-    cout << endl << "Do you want to specify the airlines (y/n): ";
+    cout << "\nDo you want to specify the airlines (y/n): ";
     cin >> choice;
     if (choice.size() > 1) {choice.clear(); choice[0] = '?';}
     choice = (char)toupper(choice[0]);
-    cout << endl;
+    cout << "\n";
 
     string airline;
 
@@ -261,26 +261,26 @@ vector<string> airlinesOptionsMenu(Manager& m) {
                     c = (char)toupper(c);
                 }
                 if (airlinemap.find(airline) == airlinemap.end()) {
-                    cout <<endl<< "Error: airline not found" << endl<<endl;
+                    cout << "\nError: airline not found\n\n";
                 } else {
                     airlines.push_back(airline);
-                    cout << endl << "Do you want to continue(y/n): ";
+                    cout << "\nDo you want to continue(y/n): ";
                     cin >> choice;
 
                     if (choice.size() > 1) {choice.clear(); choice[0] = '?';}
                     choice = (char)toupper(choice[0]);
                     if (choice[0] != 'Y') {
-                        cout<<endl;
-                        cout << "Invalid Character! ('No' was considered)" << endl;
+                        cout << "\n";
+                        cout << "Invalid Character! ('No' was considered)\n";
                         return airlines;
                     }
-                    cout << endl;
+                    cout << "\n";
                 }
             } while (choice[0] != 'N');
             return airlines;
         }
         default:{
-            cout << "Invalid Character! ('No' was considered)"<<endl<<endl ;
+            cout << "Invalid Character! ('No' was considered)\n\n";
             return {"any"};
         }
 
@@ -318,14 +318,14 @@ void airportInfoMenu(Manager& m) {
             break;
         }
         case 'B': break;
-        case '?': {cout << endl << "Error: Invalid input. Please enter one character." << endl << endl; break;}
-        default : {cout << endl << "Error: Invalid input. Please enter a valid choice." << endl << endl; break;}
+        case '?': {cout << "\nError: Invalid input. Please enter one character.\n\n"; break;}
+        default : {cout << "\nError: Invalid input. Please enter a valid choice.\n\n"; break;}
     }
 }
 
 void general_information(Manager& m) {
     string code;
-    cout << "\nIntroduce the airport code: " << endl;
+    cout << "\nIntroduce the airport code: \n";
     cout << "#> ";
     cin >> code;
     for (char& c : code) {
@@ -345,23 +345,22 @@ void general_information(Manager& m) {
         cout << "\nFrom airport " << code << " there are " << n_diff << " possible destinations!";
 
         int n_diff_countrys = m.diff_countrys(code);
-        cout << "\nFrom airport " << code << " it is possible to reach " << n_diff_countrys << " different countries!"
-             << endl;
+        cout << "\nFrom airport " << code << " it is possible to reach " << n_diff_countrys << " different countries!\n";
     } else {
-        cout << "\nERROR: There is no such airport!" << endl;
+        cout << "\nERROR: There is no such airport!\n";
     }
 }
 void y_flights(Manager& m) {
     string code, y;
     int num = 0;
-    cout << "\nIntroduce the airport code: " << endl;
+    cout << "\nIntroduce the airport code: \n";
     cout << "#> ";
     cin >> code;
     for (char& c : code) {
         c = toupper(c);
     }
 
-    cout << "\nIntroduce the number of flights: " << endl;
+    cout << "\nIntroduce the number of flights: \n";
     cout << "#> ";
     cin >> y;
 
@@ -381,33 +380,28 @@ void y_flights(Manager& m) {
         cout << "\nWith " << num << " flights it is possible to reach " << res[0] << " airports!";
         cout << "\nWith " << num << " flights it is possible to reach " << res[1] << " cities!";
         cout << "\nWith " << num << " flights it is possible to reach " << res[2] << " countries!";
-        cout << endl;
+        cout << "\n";
     }
     if (it == airports.end()) {
-        cout << "\nERROR: There is no such airport!" << endl;
+        cout << "\nERROR: There is no such airport!\n";
     }
     if (!verify_int) {
-        cout << "\nERROR: Please introduce a valid integer value!" << endl;
+        cout << "\nERROR: Please introduce a valid integer value!\n";
     }
-}
-
-wstring centerString(const wstring& s, int width) {
-    int padding = max(0, (width - (int)s.length()) / 2);
-    wstring result = s;
-    result = wstring(padding, ' ') + s + wstring(padding+(width-(2*padding+(int)s.length())), ' ');
-    return result;
 }
 
 void tablePrint(const vector<vector<string>>& paths) {
     _setmode(_fileno(stdout), _O_WTEXT);
     size_t n_cols = paths[0].size();
     size_t n_rows = paths.size();
+    wstring final;
+    final.reserve(400000);
 
     // First line
     wstring start_line;
     wstring start_pattern = L"╦═════";
     for (int i = 0; i < n_cols-2; i++) {start_line += start_pattern;}
-    wcout << L"╔═════" << start_line << L"╦══════════╗" << endl;
+    final += L"╔═════" + start_line + L"╦══════════╗\n";
 
     // Header line
     wstring code = L"Code ║";
@@ -419,41 +413,47 @@ void tablePrint(const vector<vector<string>>& paths) {
         else {header += code;}
         alternate = !alternate;
     }
-    header += L" End ║ Distance ║";
-    wcout << header << endl;
+    header += L" End ║ Distance ║\n";
+    final += header;
 
     // Mid lines
     wstring mid_line;
     wstring mid_pattern = L"╋━━━━━";
     for (int i = 0; i < n_cols-2; i++) {mid_line += mid_pattern;}
-    mid_line = L"┣━━━━━" + mid_line + L"╋━━━━━━━━━━┫";
-    wcout << mid_line << endl;
-
-    // Final line
-    wstring final_line;
-    wstring final_pattern = L"┻━━━━━";
-    for (int i = 0; i < n_cols-2; i++) {final_line += final_pattern;}
+    mid_line = L"┣━━━━━" + mid_line + L"╋━━━━━━━━━━┫\n";
+    final += mid_line;
 
     for (int i = 0; i < n_rows; i++) {
-        wcout << L"┃";
+        final += L"┃";
         for (int j = 0; j < n_cols; j++) {
             wstring_convert<codecvt_utf8<wchar_t>> converter;
             wstring wstr = converter.from_bytes(paths[i][j]);
             if (n_cols-1 == j) {
                 wstr = centerString(wstr, 8);
             }
-            wcout << L" " + wstr + L" ┃";
+            final += L" " + wstr + L" ┃";
         }
 
-        wcout << endl;
+        final += L"\n";
         if (i != n_rows-1) {
-            wcout << mid_line << endl;
+            final += mid_line;
         }
     }
 
     // Final line
-    wcout << L"┗━━━━━" << final_line << L"┻━━━━━━━━━━┛" << endl;
+    wstring final_line;
+    wstring final_pattern = L"┻━━━━━";
+    for (int i = 0; i < n_cols-2; i++) {final_line += final_pattern;}
+    final += L"┗━━━━━" + final_line + L"┻━━━━━━━━━━┛\n";
+    wprintf(L"%ls", final.c_str());
 
     // std::cout working again
     _setmode(_fileno(stdout), _O_TEXT);
+}
+
+wstring centerString(const wstring& s, int width) {
+    int padding = max(0, (width - (int)s.length()) / 2);
+    wstring result = s;
+    result = wstring(padding, ' ') + s + wstring(padding+(width-(2*padding+(int)s.length())), ' ');
+    return result;
 }

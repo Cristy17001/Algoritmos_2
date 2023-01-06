@@ -36,8 +36,8 @@ int main() {
                 break;}
             case '3': {airportInfoMenu(manager); break;}
             case 'Q': break;
-            case '?': {cout << endl << "Error: Invalid input. Please enter one character." << endl << endl; break;}
-            default : {cout << endl << "Error: Invalid input. Please enter a valid choice." << endl << endl; break;}
+            case '?': {cout << "\nError: Invalid input. Please enter one character.\n\n"; break;}
+            default : {cout << "\nError: Invalid input. Please enter a valid choice.\n\n"; break;}
         }
 
     } while (choice[0] != 'Q');
