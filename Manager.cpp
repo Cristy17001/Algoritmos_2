@@ -280,6 +280,7 @@ void Manager::load_Airlines(const std::string& filename) {
     //Eliminate first line
     getline(file, file_text);
 
+
     while(!file.eof()) {
 
         getline(file, code, ',');

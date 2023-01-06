@@ -40,6 +40,7 @@ private:
 
     unordered_map<string, Airlines> airlines;
 
+
     // Country and City defined as key to vector of airport codes
     CityToAirportsMap cities_to_airports;
 
@@ -51,6 +52,7 @@ public:
         Cities,
         Coordinates
     };
+
 
     //void set_Flights() const;
     const FlightGraph get_Flights() const;

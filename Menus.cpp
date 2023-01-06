@@ -86,19 +86,35 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
     string d_airport, d_country, d_city;
     double latitude, longitude, distance;
     vector<vector<string>> res;
+    auto airportmap = m.get_airport();
+    auto country_city_map = m.get_cities_to_airports();
 
     // Origin inputs
     if (origin == "Airports") {
         cout << '\n'<<'\n';
         cout << "Origin Airport: ";
         cin >> o_airport;
+        for (char& c : o_airport) {
+            c = toupper(c);
+        }
+
     }
     else if (origin == "Cities") {
         cout << '\n'<<'\n';
         cout << "Origin Country: ";
         cin >> o_country;
+        o_country[0] = toupper(o_country[0]);
+        for (int i = 1; i < o_country.size(); i++) {
+            o_country[i] = tolower(o_country[i]);
+        }
         cout << endl << "Origin City: ";
         cin >> o_city;
+
+        o_city[0] = toupper(o_city[0]);
+        for (int i = 1; i < o_city.size(); i++) {
+            o_city[i] = tolower(o_city[i]);
+        }
+
     }
     else if (origin == "Coordinates") {
         cout << '\n'<<'\n';
@@ -115,15 +131,26 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
         cout << '\n';
         cout << "Destination Airport: ";
         cin >> d_airport;
+        for (char& c : d_airport) {
+            c = toupper(c);
+        }
     }
     else if (dest == "Cities") {
         cout << '\n';
         cout << "Destination Country: ";
         cin >> d_country;
+        d_country[0] = toupper(d_country[0]);
+        for (int i = 1; i < d_country.size(); i++) {
+            d_country[i] = tolower(d_country[i]);
+        }
         cout << endl << "Destination City: ";
         cin >> d_city;
+        d_city[0] = toupper(d_city[0]);
+        for (int i = 1; i < d_city.size(); i++) {
+            d_city[i] = tolower(d_city[i]);
+        }
     }
-    vector<string> airlines = airlinesOptionsMenu();
+    vector<string> airlines = airlinesOptionsMenu(m);
     Manager::InputType o_input = getInputType(origin);
     Manager::InputType d_input = getInputType(dest);
 
@@ -166,9 +193,9 @@ Manager::InputType getInputType(const string& inputTypeString) {
     return Manager::Airports;
 }
 
-vector<string> airlinesOptionsMenu() {
+vector<string> airlinesOptionsMenu(Manager& m) {
     vector<string> airlines;
-
+    auto airlinemap = m.get_airlines();
     char choice;
     string airline;
     cout<< endl << "Do you want to specify the airlines (y/n): ";
@@ -179,9 +206,15 @@ vector<string> airlinesOptionsMenu() {
         do {
             cout <<endl<< "Introduce the airline: ";
             cin >> airline;
+            for (char& c : airline) {
+                c = toupper(c);
+            }
+            if(airlinemap.find(airline) == airlinemap.end()){
+                cout << "Error: airline not found" << endl;
+            } else{
             airlines.push_back(airline);
             cout <<endl << "Do you want to continue(y/n): ";
-            cin >> choice;
+            cin >> choice;}
         } while (choice != 'n');
     }
     return airlines;

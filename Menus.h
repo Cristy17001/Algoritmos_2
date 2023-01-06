@@ -16,7 +16,7 @@ void flightOptionsMenuOrigin(Manager& m, bool combination);
 void flightOptionsMenuDestination(Manager& m, const string& origin_type,bool combination);
 void flightOptionsProcess(Manager& m, vector<string> orig_dest,bool combination);
 Manager::InputType getInputType(const string& inputTypeString);
-vector<string> airlinesOptionsMenu();
+vector<string> airlinesOptionsMenu(Manager& m);
 void airportInfoMenu(Manager& m);
 void general_information(Manager& m);
 void y_flights(Manager& m);
