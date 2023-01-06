@@ -261,15 +261,17 @@ vector<string> airlinesOptionsMenu(Manager& m) {
                     c = (char)toupper(c);
                 }
                 if (airlinemap.find(airline) == airlinemap.end()) {
-                    cout << "Error: airline not found" << endl;
+                    cout <<endl<< "Error: airline not found" << endl<<endl;
                 } else {
                     airlines.push_back(airline);
                     cout << endl << "Do you want to continue(y/n): ";
                     cin >> choice;
+
                     if (choice.size() > 1) {choice.clear(); choice[0] = '?';}
                     choice = (char)toupper(choice[0]);
                     if (choice[0] != 'Y') {
-                        cout << "Invalid Character.('No' was considered)" << endl;
+                        cout<<endl;
+                        cout << "Invalid Character! ('No' was considered)" << endl;
                         return airlines;
                     }
                     cout << endl;
@@ -278,7 +280,7 @@ vector<string> airlinesOptionsMenu(Manager& m) {
             return airlines;
         }
         default:{
-            cout << "Invalid Character!('No' was considered)" << endl;
+            cout << "Invalid Character! ('No' was considered)"<<endl<<endl ;
             return {"any"};
         }
 
