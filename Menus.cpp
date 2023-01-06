@@ -2,19 +2,19 @@
 
 void flightOptionsMenuOrigin(Manager& m,bool combination) {
     string choice;
-    cout
-            << '\n'
-            << "###############################################################################\n"
-            << "#                           Flight Options Menu                               #\n"
-            << "###############################################################################\n"
-            << "# Specify the type of location you of your origin:                            #\n"
-            << "# 1. Airport                                                                  #\n"
-            << "# 2. City and Country                                                         #\n"
-            << "# 3. Latitude and Longitude                                                   #\n"
-            << "# B. Back                                                                     #\n"
-            << "###############################################################################\n"
-            << "#> ";
-
+    _setmode(_fileno(stdout), _O_WTEXT);
+    wcout << '\n'
+            << L"╔═════════════════════════════════════════════════════════════════════════════╗\n"
+            << L"║                         ✈✈Flight Options Menu✈✈                        ║\n"
+            << L"╠═════════════════════════════════════════════════════════════════════════════╣\n"
+            << L"║ Specify the type of location you of your origin:                            ║\n"
+            << L"║ 1. Airport                                                                  ║\n"
+            << L"║ 2. City and Country                                                         ║\n"
+            << L"║ 3. Latitude and Longitude                                                   ║\n"
+            << L"║ B. Back                                                                     ║\n"
+            << L"╚═════════════════════════════════════════════════════════════════════════════╝\n"
+            << L"⇒ ";
+    _setmode(_fileno(stdout), _O_TEXT);
     cin >> choice;
     if (choice.size() > 1) {choice.clear(); choice[0] = '?';}
     choice = (char)toupper(choice[0]);
@@ -40,17 +40,19 @@ void flightOptionsMenuOrigin(Manager& m,bool combination) {
 
 void flightOptionsMenuDestination(Manager& m, const string& origin_type, bool combination) {
     string choice;
-    cout
-            << '\n'
-            << "###############################################################################\n"
-            << "#                           Flight Options Menu                               #\n"
-            << "###############################################################################\n"
-            << "# Specify the type of location you of your destination:                       #\n"
-            << "# 1. Airport                                                                  #\n"
-            << "# 2. City and Country                                                         #\n"
-            << "# B. Back                                                                     #\n"
-            << "###############################################################################\n"
-            << "#> ";
+    // Special characters possible to use with Wide text
+    _setmode(_fileno(stdout), _O_WTEXT);
+    wcout << '\n'
+            << L"╔═════════════════════════════════════════════════════════════════════════════╗\n"
+            << L"║                         ✈✈Flight Options Menu✈✈                        ║\n"
+            << L"╠═════════════════════════════════════════════════════════════════════════════╣\n"
+            << L"║ Specify the type of location you of your destination:                       ║\n"
+            << L"║ 1. Airport                                                                  ║\n"
+            << L"║ 2. City and Country                                                         ║\n"
+            << L"║ B. Back                                                                     ║\n"
+            << L"╚═════════════════════════════════════════════════════════════════════════════╝\n"
+            << L"⇒ ";
+    _setmode(_fileno(stdout), _O_TEXT);
 
     cin >> choice;
     if (choice.size() > 1) {choice.clear(); choice[0] = '?';}
@@ -222,19 +224,22 @@ vector<string> airlinesOptionsMenu(Manager& m) {
 
 void airportInfoMenu(Manager& m) {
     string choice;
-    cout
-            << '\n'
-            << "###############################################################################\n"
-            << "#                           Airport Information Menu                          #\n"
-            << "###############################################################################\n"
-            << "# Please choose an option:                                                    #\n"
-            << "# 1. General information's about an airport                                   #\n"
-            << "# 2. How many locations are reachable using a maximum of Y flights            #\n"
-            << "# B. Back                                                                     #\n"
-            << "###############################################################################\n"
-            << "#> ";
+    // Special characters possible to use with Wide text
+    _setmode(_fileno(stdout), _O_WTEXT);
+    wcout << '\n'
+            << L"╔═════════════════════════════════════════════════════════════════════════════╗\n"
+            << L"║                      ✈✈Airport Information Menu✈✈                      ║\n"
+            << L"╠═════════════════════════════════════════════════════════════════════════════╣\n"
+            << L"║ Please choose an option:                                                    ║\n"
+            << L"║ 1. General information's about an airport                                   ║\n"
+            << L"║ 2. How many locations are reachable using a maximum of Y flights            ║\n"
+            << L"║ B. Back                                                                     ║\n"
+            << L"╚═════════════════════════════════════════════════════════════════════════════╝\n"
+            << L"⇒ ";
+    _setmode(_fileno(stdout), _O_TEXT);
 
     cin >> choice;
+
     if (choice.size() > 1) {choice.clear(); choice[0] = '?';}
     choice = (char)toupper(choice[0]);
 
@@ -379,6 +384,6 @@ void tablePrint(const vector<vector<string>>& paths) {
     // Final line
     wcout << L"┗━━━━━" << final_line << L"┻━━━━━━━━━━┛" << endl;
 
-
+    // std::cout working again
     _setmode(_fileno(stdout), _O_TEXT);
 }

@@ -7,20 +7,21 @@ using namespace std;
 int main() {
     Manager manager = Manager();
     string choice;
-
     do {
-        cout
-        <<'\n'
-        << "###############################################################################\n"
-        << "#                              Flight Manager                                 #\n"
-        << "###############################################################################\n"
-        << "# Please choose an option:                                                    #\n"
-        << "# 1. Find shortest path between two locations                                 #\n"
-        << "# 2. Find all the possible paths between two locations                        #\n"
-        << "# 3. Get information about an airport                                         #\n"
-        << "# Q. Quit                                                                     #\n"
-        << "###############################################################################\n"
-        << "#> ";
+        _setmode(_fileno(stdout), _O_WTEXT);
+        wcout <<'\n'
+        << L"╔═════════════════════════════════════════════════════════════════════════════╗\n"
+        << L"║                           ✈✈Flight Manager✈✈                           ║\n"
+        << L"╠═════════════════════════════════════════════════════════════════════════════╣\n"
+        << L"║ Please choose an option:                                                    ║\n"
+        << L"║ 1. Find shortest path between two locations                                 ║\n"
+        << L"║ 2. Find all the possible paths between two locations                        ║\n"
+        << L"║ 3. Get information about an airport                                         ║\n"
+        << L"║ Q. Quit                                                                     ║\n"
+        << L"╚═════════════════════════════════════════════════════════════════════════════╝\n"
+        << L"⇒";
+
+        _setmode(_fileno(stdout), _O_TEXT);
 
         cin >> choice;
         if (choice.size() > 1) {choice.clear(); choice[0] = '?';}
