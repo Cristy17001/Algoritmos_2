@@ -4,14 +4,15 @@
 
 FlightGraph::FlightGraph() = default;
 
-void FlightGraph::AddNode(string code) {
+void FlightGraph::AddNode(const string& code) {
     if (nodes_[code] == nullptr) {
-        Node *node = new Node{code};
+        Node *node = new Node();
+        node->code = code;
         nodes_[code] = node;
     }
 }
 
-void FlightGraph::AddEdge(string source, string target, string airline) {
+void FlightGraph::AddEdge(const string& source, const string& target, const string& airline) {
     Node* source_node = nodes_[source];
     if (!source_node->neighbors[target].empty()) {
         source_node->neighbors[target].push_back(airline);
@@ -25,10 +26,9 @@ unordered_map<string, Node*> FlightGraph::get_nodes() const {
     return nodes_;
 }
 
-vector<vector<Node*>> FlightGraph::BfsShortestPaths(string source_name, string target_name) {
+vector<vector<Node*>> FlightGraph::BfsShortestPaths(const string& source_name, const string& target_name) {
     queue<pair<Node*, vector<Node*>>> q;
     Node* source = nodes_[source_name];
-    Node* target = nodes_[target_name];
     vector<Node*> path;
     path.push_back(source);
     q.push({source, path});
@@ -43,7 +43,7 @@ vector<vector<Node*>> FlightGraph::BfsShortestPaths(string source_name, string t
 
         if (current->code == target_name) {
             if (shortest_length == INT_MAX) {
-                shortest_length = path.size();
+                shortest_length = (int)path.size();
             }
             if (shortest_length == INT_MAX || path.size() == shortest_length) {
                 paths.push_back(path);
@@ -51,7 +51,7 @@ vector<vector<Node*>> FlightGraph::BfsShortestPaths(string source_name, string t
             else if (path.size() < shortest_length) {
                 paths.clear();
                 paths.push_back(path);
-                shortest_length = path.size();
+                shortest_length = (int)path.size();
             }
         }
         // Don't add the target because it doesn't make sense
@@ -75,7 +75,7 @@ vector<vector<Node*>> FlightGraph::BfsShortestPaths(string source_name, string t
     return paths;
 }
 
-vector<vector<string>> FlightGraph::transformer(vector<vector<Node*>> paths) {
+vector<vector<string>> FlightGraph::transformer(const vector<vector<Node*>>& paths) {
     vector<vector<string>> res;
     for (auto path: paths) {
         vector<vector<string>> new_paths;
@@ -85,8 +85,8 @@ vector<vector<string>> FlightGraph::transformer(vector<vector<Node*>> paths) {
             string target = path[i + 1]->code;
             vector<string> airlines = path[i]->neighbors[target];
             vector<vector<string>> updated_paths;
-            for (auto p: new_paths) {
-                for (auto a: airlines) {
+            for (const auto& p: new_paths) {
+                for (const auto& a: airlines) {
                     vector<string> current_path = p;
                     current_path.push_back(a);
                     current_path.push_back(target);
@@ -100,7 +100,7 @@ vector<vector<string>> FlightGraph::transformer(vector<vector<Node*>> paths) {
     return res;
 }
 
-unordered_set<string> FlightGraph::BfsNflights(string airport, int n_flights) {
+unordered_set<string> FlightGraph::BfsNflights(const string& airport, int n_flights) {
     Node* node = nodes_[airport];
     queue<Node*> q;
     unordered_set<string> res;
@@ -126,34 +126,33 @@ unordered_set<string> FlightGraph::BfsNflights(string airport, int n_flights) {
 }
 
 
-int FlightGraph::n_flights(string airport) {
+int FlightGraph::n_flights(const string& airport) {
     auto airport_ptr = nodes_[airport];
-    return airport_ptr->neighbors.size();
+    return (int)airport_ptr->neighbors.size();
 }
 
-int FlightGraph::diff_airline(std::string airport) {
+int FlightGraph::diff_airline(const std::string& airport) {
     Node* airport_ptr = nodes_[airport];
     auto neighbors = airport_ptr->neighbors;
     // Unordered set for insertion and searching with O(1) complexity
     unordered_set<string> aux;
-    for (auto n: neighbors) {
-        for (string str: n.second) {
+    for (const auto& n: neighbors) {
+        for (const string& str: n.second) {
             aux.insert(str);
         }
     }
-    return aux.size();
+    return (int)aux.size();
 }
 
-int FlightGraph::n_diff_dest(string airport) {
-    Node* airport_ptr = nodes_[airport];
-    return nodes_[airport]->neighbors.size();
+int FlightGraph::n_diff_dest(const string& airport) {
+    return (int)nodes_[airport]->neighbors.size();
 }
 
-vector<string> FlightGraph::diff_dest(string airport) {
-    Node* airport_ptr = nodes_[airport];
+vector<string> FlightGraph::diff_dest(const string& airport) {
     vector<string> diff_airports;
-    for (auto [airport, airlines]: nodes_[airport]->neighbors) {
-        diff_airports.push_back(airport);
+    for (const auto& p: nodes_[airport]->neighbors) {
+        string airp = p.first;
+        diff_airports.push_back(airp);
     }
     return diff_airports;
 }

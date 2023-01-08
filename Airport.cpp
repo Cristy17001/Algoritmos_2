@@ -1,13 +1,15 @@
 #include "Airport.h"
 
+#include <utility>
+
 Airport::Airport() {
     code = ""; name = ""; city = ""; country = ""; latitude = 0; longitude = 0;
 }
 Airport::Airport(string code, string name, string city, string country, double latitude, double longitude) {
-    this->code = code;
-    this->name = name;
-    this->city = city;
-    this->country = country;
+    this->code = std::move(code);
+    this->name = std::move(name);
+    this->city = std::move(city);
+    this->country = std::move(country);
     this->latitude = latitude;
     this->longitude = longitude;
 }

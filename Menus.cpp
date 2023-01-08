@@ -99,7 +99,7 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
         cout << "Origin Airport: ";
         cin >> o_airport;
         for (char& c : o_airport) {
-            c = toupper(c);
+            c = (char)toupper(c);
         }
         if(airportmap.find(o_airport) == airportmap.end()){
             cout << "\nEnter a valid airport\n";
@@ -109,21 +109,21 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
 
     }
     else if (origin == "Cities") {
-        bool found = false;
+        bool found;
         do {
             cout << '\n';
             cout << "Origin Country: ";
             cin >> o_country;
-            o_country[0] = toupper(o_country[0]);
+            o_country[0] = (char)toupper(o_country[0]);
             for (int i = 1; i < o_country.size(); i++) {
-                o_country[i] = tolower(o_country[i]);
+                o_country[i] = (char)tolower(o_country[i]);
             }
             cout << "\nOrigin City: ";
             cin >> o_city;
 
-            o_city[0] = toupper(o_city[0]);
+            o_city[0] = (char)toupper(o_city[0]);
             for (int i = 1; i < o_city.size(); i++) {
-                o_city[i] = tolower(o_city[i]);
+                o_city[i] = (char)tolower(o_city[i]);
             }
 
             pair<string, string> city_pair = {o_country, o_city};
@@ -155,7 +155,7 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
         cout << "Destination Airport: ";
         cin >> d_airport;
         for (char& c : d_airport) {
-            c = toupper(c);
+            c = (char)toupper(c);
         }
         if(airportmap.find(d_airport) == airportmap.end()){
             cout << "\nEnter a valid airport\n";
@@ -165,20 +165,20 @@ void flightOptionsProcess(Manager& m, vector<string> orig_dest, bool combination
         while(airportmap.find(d_airport) == airportmap.end());
     }
     else if (dest == "Cities") {
-        bool found = false;
+        bool found;
         do{
         cout << '\n';
         cout << "Destination Country: ";
         cin >> d_country;
-        d_country[0] = toupper(d_country[0]);
+        d_country[0] = (char)toupper(d_country[0]);
         for (int i = 1; i < d_country.size(); i++) {
-            d_country[i] = tolower(d_country[i]);
+            d_country[i] = (char)tolower(d_country[i]);
         }
         cout << "\nDestination City: ";
         cin >> d_city;
-        d_city[0] = toupper(d_city[0]);
+        d_city[0] = (char)toupper(d_city[0]);
         for (int i = 1; i < d_city.size(); i++) {
-            d_city[i] = tolower(d_city[i]);
+            d_city[i] = (char)tolower(d_city[i]);
         }
         pair<string, string> city_pair = {d_country, d_city};
         auto it = country_city_map.find(city_pair);
@@ -287,6 +287,13 @@ vector<string> airlinesOptionsMenu(Manager& m) {
     }
 }
 
+/**
+ * The time complexity of this function is O(1).
+ * @param m - Manager is passed to access data
+ * Asks the user what kind of information about an airport he want to have
+ * @see general_information, y_flights
+ */
+
 void airportInfoMenu(Manager& m) {
     string choice;
     // Special characters possible to use with Wide text
@@ -323,13 +330,21 @@ void airportInfoMenu(Manager& m) {
     }
 }
 
+/**
+ * The time complexity of this function is O(1).
+ * @param m - Manager is passed to access data
+ * The function asks for input from the user and display the amount of flights, different airlines, different destinations and
+ * different county's that can be reach from a given airport
+ * @see n_flights, diff_airline, n_diff_dest, diff_countrys
+ */
+
 void general_information(Manager& m) {
     string code;
     cout << "\nIntroduce the airport code: \n";
     cout << "#> ";
     cin >> code;
     for (char& c : code) {
-        c = toupper(c);
+        c = (char)toupper(c);
     }
     auto flights = m.get_Flights();
     auto airports = m.get_airport();
@@ -350,6 +365,14 @@ void general_information(Manager& m) {
         cout << "\nERROR: There is no such airport!\n";
     }
 }
+
+/**
+ * The time complexity of this function is O(1).
+ * @param m - Manager is passed to access data
+ * The function asks for input from the user and display the amount of airports, cities and country that is possible to reach
+ * with y flights. It call a function that performs this task called n_flights_bfs and display the result.
+ * @see n_flights_bfs
+ */
 void y_flights(Manager& m) {
     string code, y;
     int num = 0;
@@ -357,7 +380,7 @@ void y_flights(Manager& m) {
     cout << "#> ";
     cin >> code;
     for (char& c : code) {
-        c = toupper(c);
+        c = (char)toupper(c);
     }
 
     cout << "\nIntroduce the number of flights: \n";
@@ -390,12 +413,17 @@ void y_flights(Manager& m) {
     }
 }
 
+/**
+ * The time complexity of this function is O(p*n), where p is the number of paths in the input list and n is the maximum length of the paths
+ * Prints the paths in a table format
+ * @param paths - paths to print
+ */
 void tablePrint(const vector<vector<string>>& paths) {
     _setmode(_fileno(stdout), _O_WTEXT);
     size_t n_cols = paths[0].size();
     size_t n_rows = paths.size();
     wstring final;
-    final.reserve(400000);
+    final.reserve(((n_cols-1)*5 + 12)*(n_rows*2));
 
     // First line
     wstring start_line;
@@ -423,11 +451,19 @@ void tablePrint(const vector<vector<string>>& paths) {
     mid_line = L"┣━━━━━" + mid_line + L"╋━━━━━━━━━━┫\n";
     final += mid_line;
 
+    // Map for avoiding repetition of conversion of the same word
+    unordered_map<string, wstring> auxiliar_map;
     for (int i = 0; i < n_rows; i++) {
         final += L"┃";
         for (int j = 0; j < n_cols; j++) {
-            wstring_convert<codecvt_utf8<wchar_t>> converter;
-            wstring wstr = converter.from_bytes(paths[i][j]);
+            wstring wstr;
+            if (auxiliar_map.count(paths[i][j]) == 0) {
+                wstring_convert<codecvt_utf8<wchar_t>> converter;
+                wstr = converter.from_bytes(paths[i][j]);
+                auxiliar_map.insert({paths[i][j], wstr});
+            }
+            else {wstr = auxiliar_map[paths[i][j]];}
+
             if (n_cols-1 == j) {
                 wstr = centerString(wstr, 8);
             }
@@ -451,6 +487,14 @@ void tablePrint(const vector<vector<string>>& paths) {
     _setmode(_fileno(stdout), _O_TEXT);
 }
 
+/**
+ * The time complexity of this function is O(1)
+ * Performs the addition of spaces to a wstring in order to center it in a table format
+ * @param s - wstring to pad
+ * @param width - the size the wstring as to have in the end
+ *
+ * @return wstring formatted for centering
+ */
 wstring centerString(const wstring& s, int width) {
     int padding = max(0, (width - (int)s.length()) / 2);
     wstring result = s;

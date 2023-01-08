@@ -13,21 +13,21 @@ Manager::Manager() {
 }
 
 
-const FlightGraph Manager::get_Flights() const {
+FlightGraph Manager::get_Flights() const {
     return this->flights;
 }
 
 
-const unordered_map<string, Airport> Manager::get_airport() const {
+unordered_map<string, Airport> Manager::get_airport() const {
     return this->airport;
 }
 
-const unordered_map<string, Airlines> Manager::get_airlines() const{
+unordered_map<string, Airlines> Manager::get_airlines() const{
     return this->airlines;
-};
+}
 
 
-const CityToAirportsMap Manager::get_cities_to_airports() const {
+CityToAirportsMap Manager::get_cities_to_airports() const {
     return cities_to_airports;
 }
 
@@ -41,7 +41,7 @@ vector<string> Manager::getAirportsByCity(const string& country, const string& c
     return e;
 }
 
-vector<vector<string>> Manager::getMinPathCombinations (const vector<string>& sourceAirports, const vector<string>& targetAirports, vector<string> valid_airlines, bool combination) {
+vector<vector<string>> Manager::getMinPathCombinations (const vector<string>& sourceAirports, const vector<string>& targetAirports, vector<string> valid_airlines, bool combination) const {
     auto graph = this->get_Flights();
     auto aux = this->get_airport();
     vector<vector<string>> path_combination;
@@ -49,7 +49,7 @@ vector<vector<string>> Manager::getMinPathCombinations (const vector<string>& so
         for (const auto& targetAirport : targetAirports) {
             if (targetAirport != sourceAirport) {
                 auto shortest_path = graph.BfsShortestPaths(sourceAirport, targetAirport);
-                auto path = graph.transformer(shortest_path);
+                auto path = FlightGraph::transformer(shortest_path);
                 for (auto& paths : path) {
 
                     // Check if the user has specified that they want to use any airline
@@ -84,7 +84,7 @@ vector<vector<string>> Manager::getMinPathCombinations (const vector<string>& so
                             int size_zero = 1;
                             int dist_verification;
                             if (!path_combination.empty()) {
-                                size_zero = path_combination[0].size();
+                                size_zero = (int)path_combination[0].size();
                                 dist_verification = stoi(path_combination[0][size_zero - 1]);
                             }
                             if (path_combination.empty() or dist_verification > distance) {
@@ -106,7 +106,7 @@ vector<vector<string>> Manager::getMinPathCombinations (const vector<string>& so
 }
 
 
-vector<vector<string>> Manager::findShortestPathConditions(InputType inputType, InputType destinationType,const string &country, const string &input,const string &countryD, const string &target, double inputLat, double inputLong, double inputDist, const vector<string>& validAirlines, bool combination) {
+vector<vector<string>> Manager::findShortestPathConditions(InputType inputType, InputType destinationType,const string &country, const string &input,const string &countryD, const string &target, double inputLat, double inputLong, double inputDist, const vector<string>& validAirlines, bool combination) const {
     auto graph = this->get_Flights();
 
     // Handle different input/destination types
@@ -143,8 +143,8 @@ vector<vector<string>> Manager::findShortestPathConditions(InputType inputType, 
             vector<string> originAirports;
             for (const auto& airport_pair : this->get_airport()) {
                 const auto& code = airport_pair.first;
-                const auto& airport = airport_pair.second;
-                if (haversine(airport.getLatitude(),airport.getLongitude(),inputLat,inputLong) < inputDist){
+                const auto& airp = airport_pair.second;
+                if (haversine(airp.getLatitude(), airp.getLongitude(), inputLat, inputLong) < inputDist){
                     originAirports.push_back(code);
                 }
             }
@@ -157,7 +157,7 @@ vector<vector<string>> Manager::findShortestPathConditions(InputType inputType, 
             }
         }
     }
- }
+}
 
 
 void Manager::load_Flights(const std::string& filename) {
@@ -262,31 +262,31 @@ double Manager::haversine(double lat1, double lon1, double lat2, double lon2) {
 }
 
 
-int Manager::diff_countrys(string airp) {
+int Manager::diff_countrys(const string& airp) {
     vector<string> diff_dest = flights.diff_dest(airp);
     unordered_set<string> counter;
-    for (string str: diff_dest) {
+    for (const string& str: diff_dest) {
         Airport a = airport[str];
         counter.insert(a.getCountry());
     }
-    return counter.size();
+    return (int)counter.size();
 }
 
-vector<int> Manager::n_flights_bfs(string airp, int n_flights) {
+vector<int> Manager::n_flights_bfs(const string& airp, int n_flights) {
     // elements in this order airports, city's, country's
     vector<int> res;
     unordered_set<string> airports = flights.BfsNflights(airp, n_flights);
-    int n_aiports = airports.size();
+    int n_aiports = (int)airports.size();
     res.push_back(n_aiports);
     unordered_set<string> countrys;
     unordered_set<string> citys;
 
-    for (auto str: airports) {
+    for (const auto& str: airports) {
         citys.insert(airport[str].getCity());
         countrys.insert(airport[str].getCountry());
     }
-    res.push_back(citys.size());
-    res.push_back(countrys.size());
+    res.push_back((int)citys.size());
+    res.push_back((int)countrys.size());
 
     return res;
 }
