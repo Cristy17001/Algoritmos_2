@@ -9,17 +9,17 @@ using namespace std;
 
 
 /**
- * @class Airlines
- * @brief Stores information about airline.
+ * \class Airlines
+ * \brief Stores information about airline.
  *
  * This class was designed to store every information about an airline including
- * @param code - the identification code of the airline
- * @param name - full name of the airline
- * @param callsign - airline identifier
- * @param country - country in which the airline is headquartered or was founded
+ * \param code - the identification code of the airline
+ * \param name - full name of the airline
+ * \param callsign - airline identifier
+ * \param country - country in which the airline is headquartered or was founded
  *
- * @note This class was designed to be used by the manager class.
- * @see Manager
+ * \note This class was designed to be used by the manager class.
+ * \see Manager
  */
 class Airlines {
 

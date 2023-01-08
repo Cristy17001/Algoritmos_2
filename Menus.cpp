@@ -287,13 +287,6 @@ vector<string> airlinesOptionsMenu(Manager& m) {
     }
 }
 
-/**
- * The time complexity of this function is O(1).
- * @param m - Manager is passed to access data
- * Asks the user what kind of information about an airport he want to have
- * @see general_information, y_flights
- */
-
 void airportInfoMenu(Manager& m) {
     string choice;
     // Special characters possible to use with Wide text
@@ -330,14 +323,6 @@ void airportInfoMenu(Manager& m) {
     }
 }
 
-/**
- * The time complexity of this function is O(1).
- * @param m - Manager is passed to access data
- * The function asks for input from the user and display the amount of flights, different airlines, different destinations and
- * different county's that can be reach from a given airport
- * @see n_flights, diff_airline, n_diff_dest, diff_countrys
- */
-
 void general_information(Manager& m) {
     string code;
     cout << "\nIntroduce the airport code: \n";
@@ -366,13 +351,7 @@ void general_information(Manager& m) {
     }
 }
 
-/**
- * The time complexity of this function is O(1).
- * @param m - Manager is passed to access data
- * The function asks for input from the user and display the amount of airports, cities and country that is possible to reach
- * with y flights. It call a function that performs this task called n_flights_bfs and display the result.
- * @see n_flights_bfs
- */
+
 void y_flights(Manager& m) {
     string code, y;
     int num = 0;
@@ -413,11 +392,7 @@ void y_flights(Manager& m) {
     }
 }
 
-/**
- * The time complexity of this function is O(p*n), where p is the number of paths in the input list and n is the maximum length of the paths
- * Prints the paths in a table format
- * @param paths - paths to print
- */
+
 void tablePrint(const vector<vector<string>>& paths) {
     _setmode(_fileno(stdout), _O_WTEXT);
     size_t n_cols = paths[0].size();
@@ -487,14 +462,6 @@ void tablePrint(const vector<vector<string>>& paths) {
     _setmode(_fileno(stdout), _O_TEXT);
 }
 
-/**
- * The time complexity of this function is O(1)
- * Performs the addition of spaces to a wstring in order to center it in a table format
- * @param s - wstring to pad
- * @param width - the size the wstring as to have in the end
- *
- * @return wstring formatted for centering
- */
 wstring centerString(const wstring& s, int width) {
     int padding = max(0, (width - (int)s.length()) / 2);
     wstring result = s;

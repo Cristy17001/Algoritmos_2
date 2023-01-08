@@ -157,6 +157,7 @@ vector<vector<string>> Manager::findShortestPathConditions(InputType inputType, 
             }
         }
     }
+    return {{}};
 }
 
 

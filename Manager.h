@@ -30,39 +30,39 @@ struct PairEqual {
 using CityToAirportsMap = unordered_map<pair<string, string>, vector<string>, PairHash, PairEqual>;
 
 /**
- * @class Manager
- * @brief Stores data about flights, airports and airlines
+ * \class Manager
+ * \brief Stores data about flights, airports and airlines
  *
  * Makes the data accessible everywhere in the program. Makes it possible to access most of data in O(1) complexity.
  * Also responsible for loading of data from .csv files
  *
- * @note This class was designed to store data about flights, airports and airlines.
- * @see FlightGraph, Airport, Airlines
+ * \note This class was designed to store data about flights, airports and airlines.
+ * \see FlightGraph, Airport, Airlines
  */
 class Manager {
 private:
 
     /**
      * Provides access to the flights graph
-     * @see FlightGraph
+     * \see FlightGraph
      */
     FlightGraph flights;
 
     /**
      * Provides access to every airport in O(1) time complexity
-     * @see Airport
+     * \see Airport
      */
     unordered_map<string, Airport> airport;
 
     /**
      * Provides access to every airline in O(1) time complexity
-     * @see Airlines
+     * \see Airlines
      */
     unordered_map<string, Airlines> airlines;
 
     /**
      * Provides access to every airport by the city and country of that airport in O(1) time complexity
-     * @see Airport
+     * \see Airport
      */
     CityToAirportsMap cities_to_airports;
 

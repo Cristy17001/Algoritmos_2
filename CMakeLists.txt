@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.23)
 project(Trabalho_Algoritmos_2)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 # Doxygen Build
 find_package(Doxygen)
@@ -26,15 +26,4 @@ else(DOXYGEN_FOUND)
 endif(DOXYGEN_FOUND)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 
-add_executable(Trabalho_Algoritmos_2
-        FlightGraph.cpp
-        FlightGraph.h
-        Manager.cpp
-        Manager.h
-        Airport.cpp
-        Airport.h
-        Airlines.cpp
-        Airlines.h
-        Menus.cpp
-        Manager.h
-        main.cpp)
+add_executable(Trabalho_Algoritmos_2 main.cpp FlightGraph.cpp FlightGraph.h Manager.cpp Manager.h Airport.cpp Airport.h Airlines.cpp Airlines.h Menus.cpp Menus.h)
