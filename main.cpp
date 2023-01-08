@@ -7,6 +7,7 @@ using namespace std;
 int main() {
     Manager manager = Manager();
     string choice;
+
     do {
         _setmode(_fileno(stdout), _O_WTEXT);
         wcout <<'\n'
@@ -19,7 +20,7 @@ int main() {
         << L"║ 3. Get information about an airport                                         ║\n"
         << L"║ Q. Quit                                                                     ║\n"
         << L"╚═════════════════════════════════════════════════════════════════════════════╝\n"
-        << L"⇒";
+        << L"#> ";
 
         _setmode(_fileno(stdout), _O_TEXT);
 

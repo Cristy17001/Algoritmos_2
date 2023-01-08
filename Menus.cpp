@@ -13,7 +13,7 @@ void flightOptionsMenuOrigin(Manager& m,bool combination) {
             << L"║ 3. Latitude and Longitude                                                   ║\n"
             << L"║ B. Back                                                                     ║\n"
             << L"╚═════════════════════════════════════════════════════════════════════════════╝\n"
-            << L"⇒ ";
+            << L"#> ";
     _setmode(_fileno(stdout), _O_TEXT);
     cin >> choice;
     if (choice.size() > 1) {choice.clear(); choice[0] = '?';}
@@ -51,7 +51,7 @@ void flightOptionsMenuDestination(Manager& m, const string& origin_type, bool co
             << L"║ 2. City and Country                                                         ║\n"
             << L"║ B. Back                                                                     ║\n"
             << L"╚═════════════════════════════════════════════════════════════════════════════╝\n"
-            << L"⇒ ";
+            << L"#> ";
     _setmode(_fileno(stdout), _O_TEXT);
 
     cin >> choice;
@@ -300,7 +300,7 @@ void airportInfoMenu(Manager& m) {
             << L"║ 2. How many locations are reachable using a maximum of Y flights            ║\n"
             << L"║ B. Back                                                                     ║\n"
             << L"╚═════════════════════════════════════════════════════════════════════════════╝\n"
-            << L"⇒ ";
+            << L"#> ";
     _setmode(_fileno(stdout), _O_TEXT);
 
     cin >> choice;

@@ -212,7 +212,7 @@ void Manager::load_Airports(const std::string& filename) {
 
         pair<string, string> country_city = {country, city};
         vector<string> vector_codes;
-        cities_to_airports[country_city].emplace_back(code);
+        cities_to_airports[country_city].push_back(code);
     }
     file.close();
 }

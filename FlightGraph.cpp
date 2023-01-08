@@ -108,6 +108,9 @@ unordered_set<string> FlightGraph::BfsNflights(const string& airport, int n_flig
 
     while (!q.empty()) {
         Node* current = q.front(); q.pop();
+        if (current->code == "SXX") {
+            cout << current->code << endl;
+        }
         if (current->n_visited <= n_flights && current->n_visited != 0) {
             res.insert(current->code);
         }
